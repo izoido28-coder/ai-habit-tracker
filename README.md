@@ -1,1 +1,1 @@
-# ai-habit-tracker
+# AI-habit-tracker
