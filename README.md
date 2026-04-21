@@ -1,1 +1,1 @@
-# AI-HabitLockIn
+# AI-Habit_Sync
