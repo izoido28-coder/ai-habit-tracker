@@ -1,1 +1,1 @@
-# AI-habit-tracker
+# AI-HELTH-RISE
