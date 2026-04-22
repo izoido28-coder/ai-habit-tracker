@@ -1,1 +1,1 @@
-# AI-habit-tracker
+#AI-Habit-Sync
