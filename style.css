@@ -17,6 +17,13 @@ h1 {
   margin-bottom: 20px;
 }
 
+.input-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 20px;
+}
+
 input {
   width: 300px;
   padding: 12px;
@@ -26,8 +33,7 @@ input {
 }
 
 button {
-  margin-left: 10px;
-  padding: 12px 16px;
+  padding: 12px 18px;
   border-radius: 10px;
   border: none;
   background: #6c5ce7;
