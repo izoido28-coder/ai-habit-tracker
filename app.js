@@ -9,7 +9,7 @@
 // YOUR API KEY — get one free at console.anthropic.com
 // Paste it between the quotes below
 // ----------------------------------------------------------
-const AI_KEY = "YOUR_API_KEY_HERE";
+const AI_KEY = "REPLACE_AT_RUNTIME";
 
 // ----------------------------------------------------------
 // HABITS LIST
