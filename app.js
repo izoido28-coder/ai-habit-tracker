@@ -9,7 +9,7 @@
 // YOUR API KEY — get one free at console.anthropic.com
 // Paste it between the quotes below
 // ----------------------------------------------------------
-const AI_KEY = "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";
+const AI_KEY = "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";
 
 // ----------------------------------------------------------
 // HABITS LIST
