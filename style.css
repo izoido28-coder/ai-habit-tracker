@@ -1,208 +1,218 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ffdde1, #c1f0ff, #e0c3fc);
-  color: #2d2440;
+/* ============================================================
+   style.css — HabitFlow
+   Clean, minimal, black + white + blue. No fluff.
+   ============================================================ */
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-
   min-height: 100vh;
-  padding-top: 60px;
-  overflow-x: hidden;
-  position: relative;
-}
-
-/* Decorative floating blobs */
-body::before,
-body::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  z-index: 0;
-  opacity: 0.35;
-}
-
-body::before {
-  width: 220px;
-  height: 220px;
-  background: #ffd6f6;
-  top: 30px;
-  left: -60px;
-}
-
-body::after {
-  width: 250px;
-  height: 250px;
-  background: #c7f9ff;
-  bottom: 40px;
-  right: -80px;
-}
-
-.app-card {
-  width: 430px;
-  max-width: 90%;
-  background: rgba(255, 255, 255, 0.38);
-  padding: 30px;
-  border-radius: 28px;
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.14);
-  backdrop-filter: blur(10px);
-  text-align: center;
-  position: relative;
-  z-index: 1;
+  padding: 48px 16px 80px;
 }
 
 h1 {
-  margin-bottom: 10px;
-  font-size: 42px;
-  color: #6a3cbc;
-  background: rgba(255, 255, 255, 0.45);
-  padding: 14px 28px;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 32px;
+  color: #fff;
 }
 
-h1::before {
-  content: "✨ ";
-}
-
-h1::after {
-  content: " 🌸";
-}
-
-.subtitle {
-  margin-top: 0;
+.profile-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
   margin-bottom: 20px;
-  color: #594872;
-  font-size: 15px;
 }
 
-.input-container {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-top: 20px;
-  background: rgba(255, 255, 255, 0.4);
-  padding: 18px;
-  border-radius: 20px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(8px);
+.profile-card h2 {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #2563eb;
+  margin-bottom: 14px;
 }
 
-input {
-  flex: 1;
-  padding: 14px;
-  border-radius: 14px;
-  border: 2px solid #ffffff;
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.profile-grid input,
+.profile-grid select {
+  width: 100%;
+  padding: 9px 11px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #000;
+  color: #fff;
+  font-size: 13px;
   outline: none;
-  font-size: 16px;
-  background: #fffafc;
-  color: #444;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.2s;
 }
 
-input:focus {
-  border: 2px solid #a86df5;
-  box-shadow: 0 0 10px rgba(168, 109, 245, 0.35);
-}
+.profile-grid input:focus,
+.profile-grid select:focus { border-color: #2563eb; }
+.profile-grid input::placeholder { color: #444; }
+.profile-grid select option { background: #111; }
 
-button {
-  padding: 12px 18px;
-  border-radius: 14px;
+.save-profile-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: #2563eb;
   border: none;
-  background: linear-gradient(135deg, #a86df5, #ff7eb6);
-  color: white;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
+}
+
+.save-profile-btn:hover { background: #1d4ed8; }
+
+.profile-saved { color: #22c55e; font-size: 12px; margin-top: 8px; display: none; }
+
+.input-container { width: 100%; max-width: 400px; margin-bottom: 20px; }
+
+.input-container button {
+  width: 100%;
+  padding: 12px;
+  background: #2563eb;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
   font-size: 15px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 6px 14px rgba(168, 109, 245, 0.35);
+  font-weight: 600;
+  cursor: pointer;
 }
 
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 18px rgba(255, 126, 182, 0.35);
-}
+.input-container button:hover { background: #1d4ed8; }
 
-ul {
-  margin-top: 25px;
-  padding: 0;
-  list-style: none;
+#list { width: 100%; max-width: 400px; }
+
+.habit-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
   width: 100%;
 }
 
-li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: left;
-  padding: 14px 16px;
-  margin-bottom: 12px;
-  background: rgba(255, 255, 255, 0.55);
-  border-radius: 16px;
-  color: #3a2f55;
-  font-size: 16px;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(8px);
-  transition: transform 0.2s ease, background 0.2s ease;
+.habit-header { display: flex; justify-content: space-between; align-items: center; }
+.habit-name { font-weight: 600; font-size: 15px; color: #fff; }
+
+.habit-type-tag {
+  font-size: 11px; padding: 3px 8px; border-radius: 6px;
+  background: #1a1a1a; color: #2563eb; border: 1px solid #222;
 }
 
-li::before {
-  content: "🌷 ";
-  margin-right: 6px;
+.delete-btn {
+  background: transparent; border: none; color: #555;
+  cursor: pointer; font-size: 16px; padding: 0 4px;
+}
+.delete-btn:hover { color: #ef4444; }
+
+.slider-section { margin-top: 12px; }
+.slider-value { font-size: 22px; font-weight: 700; color: #2563eb; margin-bottom: 6px; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: #444; margin-bottom: 6px; }
+input[type="range"] { width: 100%; accent-color: #2563eb; cursor: pointer; }
+
+.quit-section { margin-top: 12px; }
+.quit-progress { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 8px; }
+.progress-bar-bg { background: #1a1a1a; border-radius: 4px; height: 6px; width: 100%; }
+.progress-bar-fill { background: #2563eb; border-radius: 4px; height: 6px; transition: width 0.4s ease; }
+.quit-today { margin-top: 10px; display: flex; align-items: center; gap: 10px; }
+.quit-today span { font-size: 13px; color: #888; }
+.quit-today input[type="number"] {
+  width: 70px; padding: 6px; border-radius: 6px;
+  border: 1px solid #333; background: #000; color: #fff; text-align: center; font-size: 14px; outline: none;
+}
+.quit-today button { padding: 6px 14px; font-size: 13px; background: #2563eb; border: none; border-radius: 6px; color: #fff; cursor: pointer; }
+.week-plan { margin-top: 10px; font-size: 12px; color: #444; }
+.week-plan span { display: block; margin-bottom: 2px; }
+
+.check-section { margin-top: 12px; display: flex; align-items: center; gap: 10px; }
+.big-check { width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer; }
+.check-label { font-size: 14px; color: #ccc; }
+
+.ai-section {
+  background: #111; border: 1px solid #222; border-radius: 12px;
+  padding: 16px; width: 100%; max-width: 400px; margin-top: 20px;
 }
 
-li:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.75);
+.ai-section h2 {
+  font-size: 13px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; color: #2563eb; margin-bottom: 12px;
 }
 
-/* Small delete button inside each habit */
-li button {
-  background: linear-gradient(135deg, #ff8fab, #ff4d6d);
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 14px;
-  box-shadow: none;
+.ai-btn {
+  width: 100%; padding: 11px; background: #111; border: 1px solid #333;
+  border-radius: 8px; color: #fff; font-size: 14px; font-weight: 500;
+  cursor: pointer; margin-bottom: 8px; text-align: left;
 }
+.ai-btn:hover { border-color: #2563eb; }
+.ai-btn:disabled { color: #444; cursor: not-allowed; }
 
-li button:hover {
-  transform: scale(1.08);
+.ai-output {
+  background: #000; border: 1px solid #222; border-radius: 8px; padding: 12px;
+  font-size: 13px; color: #ccc; line-height: 1.7; display: none; margin-top: 8px; white-space: pre-wrap;
 }
+.ai-loading { color: #444; font-size: 13px; display: none; margin-top: 8px; }
 
-/* Completed habit */
-.completed {
-  text-decoration: line-through;
-  color: #8b7ca8;
-  background: rgba(220, 255, 230, 0.75);
+.modal-overlay {
+  display: none; position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%; background: rgba(0,0,0,0.85);
+  z-index: 100; justify-content: center; align-items: center;
 }
+.modal-overlay.open { display: flex; }
 
-/* Cute sparkles effect */
-.sparkle {
-  position: absolute;
-  font-size: 24px;
-  z-index: 0;
-  opacity: 0.8;
+.modal {
+  background: #111; border: 1px solid #222; border-radius: 14px;
+  padding: 24px; width: 340px;
 }
+.modal h2 { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #fff; }
 
-.sparkle1 {
-  top: 110px;
-  left: 120px;
+.modal input, .modal select {
+  width: 100%; padding: 10px 12px; border-radius: 8px;
+  border: 1px solid #333; background: #000; color: #fff;
+  margin-bottom: 8px; font-size: 14px; outline: none;
 }
+.modal input:focus, .modal select:focus { border-color: #2563eb; }
+.modal input::placeholder { color: #444; }
 
-.sparkle2 {
-  top: 180px;
-  right: 130px;
-}
+.habit-type-selector { display: flex; gap: 8px; margin: 4px 0; flex-wrap: wrap; }
 
-.sparkle3 {
-  bottom: 140px;
-  left: 180px;
+.habit-type-btn {
+  padding: 7px 14px; border-radius: 6px; border: 1px solid #333;
+  background: transparent; color: #888; cursor: pointer; font-size: 13px;
 }
+.habit-type-btn:hover { border-color: #2563eb; color: #fff; }
+.habit-type-btn.active { background: #2563eb; border-color: #2563eb; color: #fff; }
 
-.sparkle4 {
-  bottom: 90px;
-  right: 180px;
-}
+.modal-actions { display: flex; gap: 8px; margin-top: 12px; }
+.modal-actions button { flex: 1; padding: 10px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; }
+.modal-actions button:last-child { background: #2563eb; color: #fff; }
+.modal-actions button:last-child:hover { background: #1d4ed8; }
+.cancel-btn { background: #1a1a1a !important; color: #888 !important; border: 1px solid #333 !important; }
+
+.extra-fields { display: none; }
+.field-label { font-size: 11px; color: #555; margin-bottom: 4px; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+#list p { color: #333; font-size: 14px; text-align: center; margin-top: 20px; }
