@@ -9,7 +9,7 @@
 // YOUR API KEY — get one free at console.anthropic.com
 // Paste it between the quotes below
 // ----------------------------------------------------------
-const AI_KEY = "REPLACE_AT_RUNTIME";
+const AI_KEY = "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";
 
 // ----------------------------------------------------------
 // HABITS LIST
