@@ -1,8 +1,8 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #0f0f1a;
-  color: white;
+  background: linear-gradient(135deg, #ffdde1, #c1f0ff, #e0c3fc);
+  color: #2d2440;
 
   display: flex;
   flex-direction: column;
@@ -11,10 +11,72 @@ body {
 
   min-height: 100vh;
   padding-top: 60px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Decorative floating blobs */
+body::before,
+body::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  z-index: 0;
+  opacity: 0.35;
+}
+
+body::before {
+  width: 220px;
+  height: 220px;
+  background: #ffd6f6;
+  top: 30px;
+  left: -60px;
+}
+
+body::after {
+  width: 250px;
+  height: 250px;
+  background: #c7f9ff;
+  bottom: 40px;
+  right: -80px;
+}
+
+.app-card {
+  width: 430px;
+  max-width: 90%;
+  background: rgba(255, 255, 255, 0.38);
+  padding: 30px;
+  border-radius: 28px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 h1 {
+  margin-bottom: 10px;
+  font-size: 42px;
+  color: #6a3cbc;
+  background: rgba(255, 255, 255, 0.45);
+  padding: 14px 28px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+h1::before {
+  content: "✨ ";
+}
+
+h1::after {
+  content: " 🌸";
+}
+
+.subtitle {
+  margin-top: 0;
   margin-bottom: 20px;
+  color: #594872;
+  font-size: 15px;
 }
 
 .input-container {
@@ -22,37 +84,125 @@ h1 {
   gap: 12px;
   align-items: center;
   margin-top: 20px;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 18px;
+  border-radius: 20px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(8px);
 }
 
 input {
-  width: 300px;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  border: 2px solid #ffffff;
   outline: none;
+  font-size: 16px;
+  background: #fffafc;
+  color: #444;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+input:focus {
+  border: 2px solid #a86df5;
+  box-shadow: 0 0 10px rgba(168, 109, 245, 0.35);
 }
 
 button {
   padding: 12px 18px;
-  border-radius: 10px;
+  border-radius: 14px;
   border: none;
-  background: #6c5ce7;
+  background: linear-gradient(135deg, #a86df5, #ff7eb6);
   color: white;
   cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 14px rgba(168, 109, 245, 0.35);
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 18px rgba(255, 126, 182, 0.35);
 }
 
 ul {
-  margin-top: 20px;
+  margin-top: 25px;
   padding: 0;
   list-style: none;
-  width: 360px;
+  width: 100%;
 }
 
 li {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #1c1c2e;
+  align-items: center;
+  text-align: left;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 16px;
+  color: #3a2f55;
+  font-size: 16px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+li::before {
+  content: "🌷 ";
+  margin-right: 6px;
+}
+
+li:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.75);
+}
+
+/* Small delete button inside each habit */
+li button {
+  background: linear-gradient(135deg, #ff8fab, #ff4d6d);
+  padding: 8px 12px;
   border-radius: 10px;
+  font-size: 14px;
+  box-shadow: none;
+}
+
+li button:hover {
+  transform: scale(1.08);
+}
+
+/* Completed habit */
+.completed {
+  text-decoration: line-through;
+  color: #8b7ca8;
+  background: rgba(220, 255, 230, 0.75);
+}
+
+/* Cute sparkles effect */
+.sparkle {
+  position: absolute;
+  font-size: 24px;
+  z-index: 0;
+  opacity: 0.8;
+}
+
+.sparkle1 {
+  top: 110px;
+  left: 120px;
+}
+
+.sparkle2 {
+  top: 180px;
+  right: 130px;
+}
+
+.sparkle3 {
+  bottom: 140px;
+  left: 180px;
+}
+
+.sparkle4 {
+  bottom: 90px;
+  right: 180px;
 }
