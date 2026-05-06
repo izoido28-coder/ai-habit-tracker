@@ -405,29 +405,28 @@ function getHabitsText() {
 
 // The actual API call — sends a prompt to Claude and returns the response
 async function callAI(prompt) {
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-api-key": AI_KEY,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
+      "Authorization": `Bearer ${API_KEY}`
     },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 500,
-      messages: [{ role: "user", content: prompt }]
+      model: "llama3-70b-8192",
+      messages: [
+        { role: "user", content: prompt }
+      ]
     })
   });
 
   const data = await response.json();
 
-  // If the API returns an error, throw it so we can show it on screen
-  if (data.error) throw new Error(data.error.message);
+  if (!response.ok) {
+    throw new Error(data.error?.message || "Groq API error");
+  }
 
-  return data.content[0].text;
+  return data.choices[0].message.content;
 }
-
 // Shows the AI response on screen
 function showAIResult(text) {
   const out = document.getElementById("ai-output");
