@@ -9,9 +9,10 @@
 // YOUR API KEY — get one free at console.anthropic.com
 // Paste it between the quotes below
 // ----------------------------------------------------------
-const AI_KEY = "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";
+curl https://api.anthropic.com/v1/organizations/api_keys/$API_KEY_ID \
+    -H 'anthropic-version: 2023-06-01' \
+    -H "X-Api-Key: $ANTHROPIC_ADMIN_API_KEY"
 
-// ----------------------------------------------------------
 // HABITS LIST
 // This is where all habits are stored while the app is open.
 // We also save them to localStorage so they survive a refresh.
