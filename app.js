@@ -9,7 +9,7 @@
 // YOUR API KEY — get one free at console.anthropic.com
 // Paste it between the quotes below
 // ----------------------------------------------------------
-const apiKey = process.env.OPENAI_API_KEY;
+const API_KEY = "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"
 
 // HABITS LIST
 // This is where all habits are stored while the app is open.
