@@ -9,9 +9,7 @@
 // YOUR API KEY — get one free at console.anthropic.com
 // Paste it between the quotes below
 // ----------------------------------------------------------
-curl https://api.anthropic.com/v1/organizations/api_keys/$API_KEY_ID \
-    -H 'anthropic-version: 2023-06-01' \
-    -H "X-Api-Key: $ANTHROPIC_ADMIN_API_KEY"
+const apiKey = process.env.OPENAI_API_KEY;
 
 // HABITS LIST
 // This is where all habits are stored while the app is open.
