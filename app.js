@@ -6,7 +6,7 @@
 // ============================================================
 
 // ----------------------------------------------------------
-// YOUR API KEY — get one free at console.anthropic.com
+// YOUR API KEY — get one free at console.groq.com
 // Paste it between the quotes below
 // ----------------------------------------------------------
 const API_KEY = "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"
@@ -26,9 +26,10 @@ let selectedType = "slider";
 // This runs automatically when the page finishes loading
 // ----------------------------------------------------------
 window.onload = function () {
-  loadProfile();   // fill in profile fields from last time
-  loadHabits();    // load saved habits from localStorage
-  renderHabits();  // draw the habits on screen
+  loadProfile();      // fill in profile fields from last time
+  loadHabits();       // load saved habits from localStorage
+  checkDailyReset();  // reset daily progress if it's a new day
+  renderHabits();     // draw the habits on screen
   showFields("slider"); // show slider fields by default in modal
 };
 
@@ -128,7 +129,11 @@ function addHabit() {
     id: Date.now(),       // unique ID based on current timestamp
     name: name,
     type: selectedType,
-    completed: false
+    completed: false,
+    streak: 0,            // current streak in days
+    bestStreak: 0,        // all-time best streak
+    lastLoggedDate: null, // last date the user hit their goal
+    completedToday: false // whether goal was hit today already
   };
 
   // Add extra properties depending on the habit type
@@ -185,6 +190,74 @@ function deleteHabit(id) {
 
 
 // ============================================================
+//  DAILY RESET — resets progress each new day
+// ============================================================
+
+function checkDailyReset() {
+  const today = new Date().toDateString();
+  const lastReset = localStorage.getItem("lastResetDate");
+
+  // If we already reset today, do nothing
+  if (lastReset === today) return;
+
+  // It's a new day — reset daily completions for all habits
+  habits.forEach(habit => {
+    if (habit.type === "slider") {
+      habit.current = 0;
+      habit.completedToday = false;
+    }
+    if (habit.type === "checkbox") {
+      habit.done = false;
+      habit.completedToday = false;
+    }
+    if (habit.type === "quit") {
+      // Reset today's count back to this week's target
+      const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+      const weekIndex = Math.min(
+        Math.floor((Date.now() - new Date(habit.startDate)) / msPerWeek),
+        habit.weeks - 1
+      );
+      habit.todayCount = habit.weekPlan[weekIndex]?.dailyTarget ?? habit.startAmount;
+      habit.completedToday = false;
+    }
+  });
+
+  localStorage.setItem("lastResetDate", today);
+  saveHabits();
+}
+
+
+// ============================================================
+//  STREAK — updates streak when a goal is hit
+// ============================================================
+
+function updateStreak(habit, goalMet) {
+  if (!goalMet) return;           // didn't hit goal, no streak update
+  if (habit.completedToday) return; // already counted today
+
+  const today = new Date().toDateString();
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toDateString();
+
+  if (habit.lastLoggedDate === yesterdayStr) {
+    // Continued the streak from yesterday
+    habit.streak = (habit.streak || 0) + 1;
+  } else {
+    // Missed a day (or first ever completion) — start fresh
+    habit.streak = 1;
+  }
+
+  // Update best streak if current streak beats it
+  habit.bestStreak = Math.max(habit.streak, habit.bestStreak || 0);
+  habit.lastLoggedDate = today;
+  habit.completedToday = true;
+
+  saveHabits();
+}
+
+
+// ============================================================
 //  RENDER — draws all habits on the screen
 // ============================================================
 
@@ -203,11 +276,23 @@ function renderHabits() {
     const card = document.createElement("div");
     card.className = "habit-card";
 
-    // Every card has a header with the name, type tag, and delete button
+    // Build streak display — show fire emoji and count if streak > 0
+    const streakHTML = habit.streak > 0
+      ? `<span style="font-size:13px;color:#f97316;font-weight:600;">🔥 ${habit.streak} day streak</span>`
+      : "";
+
+    // Best streak badge — show if they have a best streak recorded
+    const bestStreakHTML = habit.bestStreak > 1
+      ? `<span style="font-size:11px;color:#a78bfa;" title="Your best streak">⭐ Best: ${habit.bestStreak}</span>`
+      : "";
+
+    // Every card has a header with the name, streak, type tag, and delete button
     card.innerHTML = `
       <div class="habit-header">
         <span class="habit-name">${habit.name}</span>
-        <div style="display:flex;gap:8px;align-items:center;">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+          ${bestStreakHTML}
+          ${streakHTML}
           <span class="habit-type-tag">${labelFor(habit.type)}</span>
           <button class="delete-btn" onclick="deleteHabit(${habit.id})">✕</button>
         </div>
@@ -254,19 +339,26 @@ function buildSlider(habit) {
       value="${habit.current}"
       oninput="updateSlider(${habit.id}, this.value)" />
     <div style="font-size:12px;color:${pct >= 100 ? '#22c55e' : '#555'};margin-top:6px;">
-      ${pct >= 100 ? "Goal reached!" : pct + "% of daily goal"}
+      ${pct >= 100 ? "✅ Goal reached!" : pct + "% of daily goal"}
     </div>
   `;
   return div;
 }
 
-// Called every time the slider moves — updates the displayed value
+// Called every time the slider moves — updates the displayed value and checks streak
 function updateSlider(id, value) {
   const habit = habits.find(h => h.id === id);
   if (!habit) return;
   habit.current = parseFloat(value);
   document.getElementById("sv-" + id).textContent = `${habit.current} ${habit.unit}`;
+
+  // Check if goal is met and update streak
+  const goalMet = habit.current >= habit.goalVal;
+  updateStreak(habit, goalMet);
+
   saveHabits();
+  // Re-render only if streak changed (to update the fire badge without breaking the slider)
+  if (goalMet && habit.completedToday) renderHabits();
 }
 
 
@@ -325,6 +417,17 @@ function updateQuit(id) {
   const habit = habits.find(h => h.id === id);
   if (!habit) return;
   habit.todayCount = parseInt(document.getElementById("qt-" + id).value) || 0;
+
+  // Check if user is at or below this week's target (goal met = lower is better)
+  const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+  const weekIndex = Math.min(
+    Math.floor((Date.now() - new Date(habit.startDate)) / msPerWeek),
+    habit.weeks - 1
+  );
+  const target = habit.weekPlan[weekIndex]?.dailyTarget ?? 0;
+  const goalMet = habit.todayCount <= target;
+  updateStreak(habit, goalMet);
+
   saveHabits();
   renderHabits();
 }
@@ -356,6 +459,7 @@ function toggleCheckbox(id, checked) {
   const habit = habits.find(h => h.id === id);
   if (!habit) return;
   habit.done = checked;
+  updateStreak(habit, checked); // checking = goal met, unchecking = not
   saveHabits();
   renderHabits();
 }
@@ -378,7 +482,7 @@ function loadHabits() {
 
 
 // ============================================================
-//  AI COACH — sends habit + profile data to Claude API
+//  AI COACH — sends habit + profile data to Groq API
 // ============================================================
 
 // Builds a text summary of the user's profile for the AI prompt
@@ -394,16 +498,16 @@ function getHabitsText() {
 
   return habits.map(h => {
     if (h.type === "slider")
-      return `${h.name}: ${h.current} out of ${h.goalVal} ${h.unit} today`;
+      return `${h.name}: ${h.current} out of ${h.goalVal} ${h.unit} today (streak: ${h.streak || 0} days)`;
     if (h.type === "quit")
-      return `${h.name}: had ${h.todayCount} today (started at ${h.startAmount}, goal is 0 in ${h.weeks} weeks)`;
+      return `${h.name}: had ${h.todayCount} today (started at ${h.startAmount}, goal is 0 in ${h.weeks} weeks, streak: ${h.streak || 0} days)`;
     if (h.type === "checkbox")
-      return `${h.name}: ${h.done ? "done" : "not done yet"}`;
+      return `${h.name}: ${h.done ? "done" : "not done yet"} (streak: ${h.streak || 0} days)`;
     return h.name;
   }).join("\n");
 }
 
-// The actual API call — sends a prompt to Claude and returns the response
+// The actual API call — sends a prompt to Groq and returns the response
 async function callAI(prompt) {
   const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
@@ -427,6 +531,7 @@ async function callAI(prompt) {
 
   return data.choices[0].message.content;
 }
+
 // Shows the AI response on screen
 function showAIResult(text) {
   const out = document.getElementById("ai-output");
@@ -448,6 +553,7 @@ async function getTomorrowPlan() {
   const prompt = `
 You are a helpful health coach. Based on this user's profile and today's habit progress,
 create a short practical plan for tomorrow. Be specific and encouraging.
+If they have any active streaks, acknowledge them and encourage keeping them going.
 
 USER PROFILE:
 ${getProfileText()}
@@ -474,6 +580,7 @@ async function getDailyTip() {
   const prompt = `
 You are a concise health coach. Based on this user's profile and habits,
 give ONE specific actionable tip for today. Maximum 3 sentences.
+If they have an active streak on any habit, mention it briefly to keep them motivated.
 
 USER PROFILE:
 ${getProfileText()}
