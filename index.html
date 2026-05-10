@@ -1,195 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HabitFlow</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- NEW: extra styles only for new components, your partner's style.css still works -->
-  <style>
-    /* === PROFILE SECTION === */
-    .profile-card {
-      background: #1c1c2e;
-      border-radius: 14px;
-      padding: 20px;
-      width: 360px;
-      margin-top: 20px;
-    }
-    .profile-card h2 { margin: 0 0 14px 0; font-size: 16px; color: #a29bfe; }
-    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .profile-grid input, .profile-grid select {
-      width: 100%; padding: 8px; border-radius: 8px;
-      border: 1px solid #3d3d5c; background: #0f0f1a; color: white;
-      box-sizing: border-box; font-size: 13px;
-    }
-    .profile-grid input::placeholder { color: #666; }
-    .save-profile-btn {
-      width: 100%; margin-top: 10px; padding: 10px;
-      background: #6c5ce7; border: none; border-radius: 10px;
-      color: white; cursor: pointer; font-size: 14px;
-    }
-    .profile-saved { color: #00cec9; font-size: 12px; margin-top: 6px; display: none; }
- 
-    /* === ADD HABIT MODAL === */
-    .habit-type-selector {
-      display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; justify-content: center;
-    }
-    .habit-type-btn {
-      padding: 8px 14px; border-radius: 20px; border: 1px solid #3d3d5c;
-      background: transparent; color: #ccc; cursor: pointer; font-size: 13px;
-      transition: all 0.2s;
-    }
-    .habit-type-btn.active { background: #6c5ce7; border-color: #6c5ce7; color: white; }
- 
-    /* === HABIT CARDS === */
-    .habit-card {
-      background: #1c1c2e; border-radius: 14px;
-      padding: 14px 16px; margin-bottom: 14px; width: 360px;
-    }
-    .habit-header { display: flex; justify-content: space-between; align-items: center; }
-    .habit-name { font-weight: 600; font-size: 15px; }
-    .habit-type-tag {
-      font-size: 11px; padding: 3px 8px; border-radius: 10px;
-      background: #2d2d4e; color: #a29bfe;
-    }
-    .delete-btn {
-      background: transparent; border: none; color: #e17055;
-      cursor: pointer; font-size: 16px; padding: 0 4px;
-    }
- 
-    /* === SLIDER HABIT === */
-    .slider-section { margin-top: 12px; }
-    .slider-labels { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 4px; }
-    .slider-value { font-size: 20px; font-weight: 700; color: #a29bfe; margin-bottom: 6px; }
-    input[type="range"] {
-      width: 100%; accent-color: #6c5ce7; cursor: pointer;
-    }
- 
-    /* === QUIT HABIT === */
-    .quit-section { margin-top: 12px; }
-    .quit-progress {
-      display: flex; justify-content: space-between;
-      font-size: 13px; margin-bottom: 8px;
-    }
-    .progress-bar-bg {
-      background: #2d2d4e; border-radius: 10px; height: 8px; width: 100%;
-    }
-    .progress-bar-fill {
-      background: #00cec9; border-radius: 10px; height: 8px;
-      transition: width 0.4s ease;
-    }
-    .quit-today { margin-top: 10px; display: flex; align-items: center; gap: 10px; }
-    .quit-today input[type="number"] {
-      width: 70px; padding: 6px; border-radius: 8px;
-      border: 1px solid #3d3d5c; background: #0f0f1a; color: white; text-align: center;
-    }
-    .quit-today button {
-      padding: 6px 12px; font-size: 13px;
-    }
-    .week-plan { margin-top: 10px; font-size: 12px; color: #888; }
-    .week-plan span { display: block; margin-bottom: 2px; }
- 
-    /* === CHECKBOX HABIT === */
-    .check-section { margin-top: 12px; display: flex; align-items: center; gap: 10px; }
-    .big-check { width: 24px; height: 24px; accent-color: #6c5ce7; cursor: pointer; }
-    .check-label { font-size: 14px; color: #ccc; }
- 
-    /* === AI SECTION === */
-    .ai-section {
-      background: #1c1c2e; border-radius: 14px;
-      padding: 16px; width: 360px; margin-top: 20px; box-sizing: border-box;
-    }
-    .ai-section h2 { margin: 0 0 12px 0; font-size: 15px; color: #a29bfe; }
-    .ai-btn {
-      width: 100%; padding: 11px; background: #6c5ce7;
-      border: none; border-radius: 10px; color: white;
-      cursor: pointer; font-size: 14px; margin-bottom: 8px;
-    }
-    .ai-btn:disabled { background: #3d3d5c; cursor: not-allowed; }
-    .ai-output {
-      background: #0f0f1a; border-radius: 10px; padding: 12px;
-      font-size: 13px; color: #dfe6e9; line-height: 1.6;
-      min-height: 40px; display: none; margin-top: 8px;
-      white-space: pre-wrap;
-    }
-    .ai-loading { color: #888; font-size: 13px; display: none; margin-top: 6px; }
- 
-    /* === MODAL === */
-    .modal-overlay {
-      display: none; position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%; background: rgba(0,0,0,0.7);
-      z-index: 100; justify-content: center; align-items: center;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      background: #1c1c2e; border-radius: 16px;
-      padding: 24px; width: 340px; position: relative;
-    }
-    .modal h2 { margin: 0 0 16px; font-size: 16px; }
-    .modal input, .modal select {
-      width: 100%; padding: 10px; border-radius: 8px;
-      border: 1px solid #3d3d5c; background: #0f0f1a;
-      color: white; margin-bottom: 10px; box-sizing: border-box; font-size: 14px;
-    }
-    .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
-    .modal-actions button { flex: 1; padding: 10px; font-size: 14px; }
-    .cancel-btn { background: #2d2d4e !important; }
-    .extra-fields { display: none; }
-    .field-label { font-size: 12px; color: #888; margin-bottom: 4px; margin-top: 6px; }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <h1>HabitFlow</h1>
- 
-  <!-- PROFILE SECTION -->
-  <div class="profile-card">
-    <h2>👤 Your Profile</h2>
-    <div class="profile-grid">
-      <input id="p-name" placeholder="Name" />
-      <select id="p-gender">
-        <option value="" disabled selected>Gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-      </select>
-      <input id="p-age" type="number" placeholder="Age" />
-      <input id="p-weight" type="number" placeholder="Weight (kg)" />
-      <input id="p-height" type="number" placeholder="Height (cm)" />
-      <input id="p-goal" placeholder="Main goal" />
+
+  <!-- TWO-COLUMN LAYOUT -->
+  <div class="layout">
+
+    <!-- LEFT COLUMN: Profile + AI Coach -->
+    <div class="col-left">
+
+      <!-- PROFILE CARD -->
+      <div class="profile-card">
+        <h2>👤 Your Profile</h2>
+        <div class="profile-grid">
+          <input id="p-name" placeholder="Name" />
+          <select id="p-gender">
+            <option value="" disabled selected>Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          <input id="p-age" type="number" placeholder="Age" />
+          <input id="p-weight" type="number" placeholder="Weight (kg)" />
+          <input id="p-height" type="number" placeholder="Height (cm)" />
+          <input id="p-goal" placeholder="Main goal" />
+        </div>
+        <button class="save-profile-btn" onclick="saveProfile()">Save Profile</button>
+        <div class="profile-saved" id="profile-saved">✓ Saved</div>
+      </div>
+
+      <!-- AI COACH -->
+      <div class="ai-section">
+        <h2>🤖 AI Coach</h2>
+        <div class="ai-buttons">
+          <button class="ai-btn" onclick="getTomorrowPlan()">📅 Tomorrow's Plan</button>
+          <button class="ai-btn" onclick="getDailyTip()">💡 Get a Tip</button>
+        </div>
+        <div class="ai-loading" id="ai-loading">Thinking...</div>
+        <div class="ai-output" id="ai-output"></div>
+      </div>
+
     </div>
-    <button class="save-profile-btn" onclick="saveProfile()">Save Profile</button>
-    <div class="profile-saved" id="profile-saved">✓ Profile saved!</div>
+    <!-- END LEFT COLUMN -->
+
+    <!-- RIGHT COLUMN: Add Habit + Habit List -->
+    <div class="col-right">
+
+      <!-- ADD HABIT BUTTON -->
+      <div class="input-container">
+        <button onclick="openModal()">+ Add Habit</button>
+      </div>
+
+      <!-- HABIT LIST -->
+      <div id="list"></div>
+
+    </div>
+    <!-- END RIGHT COLUMN -->
+
   </div>
- 
-  <!-- ADD HABIT BUTTON -->
-  <div class="input-container">
-    <button onclick="openModal()">+ Add Habit</button>
-  </div>
- 
-  <!-- HABIT LIST -->
-  <div id="list"></div>
- 
-  <!-- AI SECTION -->
-  <div class="ai-section">
-    <h2>🤖 AI Coach</h2>
-    <button class="ai-btn" onclick="getTomorrowPlan()">📅 Generate Tomorrow's Plan</button>
-    <button class="ai-btn" onclick="getDailyTip()">💡 Get a Tip</button>
-    <div class="ai-loading" id="ai-loading">Thinking...</div>
-    <div class="ai-output" id="ai-output"></div>
-  </div>
- 
+  <!-- END LAYOUT -->
+
   <!-- ADD HABIT MODAL -->
   <div class="modal-overlay" id="modal">
     <div class="modal">
-      <h2>Add New Habit</h2>
- 
+      <h2>New Habit</h2>
+
       <div class="habit-type-selector">
         <button class="habit-type-btn active" onclick="selectType('slider', this)">💧 Slider</button>
         <button class="habit-type-btn" onclick="selectType('quit', this)">🚭 Quit</button>
         <button class="habit-type-btn" onclick="selectType('checkbox', this)">✅ Checkbox</button>
       </div>
- 
+
       <div style="margin-top:14px;">
         <input id="m-name" placeholder="Habit name (e.g. Drink water)" />
- 
+
         <!-- Slider fields -->
         <div class="extra-fields" id="fields-slider">
           <div class="field-label">Unit (e.g. liters, steps, hours)</div>
@@ -199,7 +90,7 @@
           <div class="field-label">Daily goal</div>
           <input id="m-goal-val" type="number" placeholder="e.g. 2" />
         </div>
- 
+
         <!-- Quit fields -->
         <div class="extra-fields" id="fields-quit">
           <div class="field-label">How many per day right now?</div>
@@ -207,22 +98,21 @@
           <div class="field-label">Target: 0 in how many weeks?</div>
           <input id="m-weeks" type="number" placeholder="e.g. 8" />
         </div>
- 
+
         <!-- Checkbox fields -->
         <div class="extra-fields" id="fields-checkbox">
           <div class="field-label">Description (optional)</div>
           <input id="m-desc" placeholder="e.g. 30 min morning run" />
         </div>
       </div>
- 
+
       <div class="modal-actions">
         <button class="cancel-btn" onclick="closeModal()">Cancel</button>
         <button onclick="addHabit()">Add Habit</button>
       </div>
     </div>
   </div>
- 
+
   <script src="app.js" defer></script>
 </body>
 </html>
- 
