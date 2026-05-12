@@ -414,6 +414,16 @@ input[type="range"] {
   display: none;
   margin-top: 10px;
   white-space: pre-wrap;
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 860px;
+  max-height: 340px;
+  overflow-y: auto;
+  z-index: 50;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
 }
 
 .ai-loading {
