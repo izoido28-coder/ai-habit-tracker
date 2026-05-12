@@ -596,3 +596,138 @@ ${getHabitsText()}
     showAIResult("Could not reach AI. Check your API key in app.js\n\nError: " + e.message);
   }
 }
+
+// ============================================================
+//  POMODORO FOCUS MODE
+// ============================================================
+
+const WORK_MINS = 25;
+const BREAK_MINS = 5;
+const TOTAL_SESSIONS = 4;
+const RING_CIRCUMFERENCE = 339.3;
+
+let focusInterval = null;
+let focusRunning  = false;
+let focusIsBreak  = false;
+let focusSession  = 0;
+let focusSecsLeft = WORK_MINS * 60;
+
+function openFocus() {
+  document.getElementById("focus-overlay").classList.add("open");
+  updateFocusDisplay();
+}
+
+function closeFocus() {
+  document.getElementById("focus-overlay").classList.remove("open");
+  pauseFocus();
+}
+
+function toggleFocus() {
+  focusRunning ? pauseFocus() : startFocus();
+}
+
+function startFocus() {
+  focusRunning = true;
+  document.getElementById("focus-start-btn").textContent = "⏸ Pause";
+  focusInterval = setInterval(() => {
+    focusSecsLeft--;
+    if (focusSecsLeft <= 0) {
+      clearInterval(focusInterval);
+      focusRunning = false;
+      playBeep();
+      if (!focusIsBreak) {
+        markSessionDone(focusSession);
+        if (focusSession < TOTAL_SESSIONS - 1) {
+          focusIsBreak = true;
+          focusSecsLeft = BREAK_MINS * 60;
+          updateFocusDisplay();
+          startFocus();
+        } else {
+          focusSession = 0; focusIsBreak = false;
+          focusSecsLeft = WORK_MINS * 60;
+          updateFocusDisplay();
+          document.getElementById("focus-start-btn").textContent = "▶ Start";
+          resetDots();
+        }
+      } else {
+        focusIsBreak = false;
+        focusSession++;
+        focusSecsLeft = WORK_MINS * 60;
+        updateFocusDisplay();
+        document.getElementById("focus-start-btn").textContent = "▶ Start";
+      }
+      return;
+    }
+    updateFocusDisplay();
+  }, 1000);
+}
+
+function pauseFocus() {
+  clearInterval(focusInterval);
+  focusRunning = false;
+  document.getElementById("focus-start-btn").textContent = "▶ Start";
+}
+
+function resetFocus() {
+  pauseFocus();
+  focusSession = 0; focusIsBreak = false;
+  focusSecsLeft = WORK_MINS * 60;
+  resetDots(); updateFocusDisplay();
+}
+
+function updateFocusDisplay() {
+  const mins = Math.floor(focusSecsLeft / 60);
+  const secs = focusSecsLeft % 60;
+  document.getElementById("focus-timer").textContent =
+    String(mins).padStart(2,"0") + ":" + String(secs).padStart(2,"0");
+
+  const label    = document.getElementById("focus-mode-label");
+  const ringFill = document.getElementById("focus-ring-fill");
+
+  if (focusIsBreak) {
+    label.textContent = "BREAK"; label.className = "focus-mode-label break";
+    ringFill.className = "focus-ring-fill break";
+  } else {
+    label.textContent = "WORK SESSION"; label.className = "focus-mode-label";
+    ringFill.className = "focus-ring-fill";
+  }
+
+  document.getElementById("focus-session-count").textContent = focusIsBreak
+    ? "Break — next: Session " + (focusSession + 2)
+    : "Session " + (focusSession + 1) + " of " + TOTAL_SESSIONS;
+
+  const total = focusIsBreak ? BREAK_MINS * 60 : WORK_MINS * 60;
+  const offset = RING_CIRCUMFERENCE - ((total - focusSecsLeft) / total) * RING_CIRCUMFERENCE;
+  ringFill.style.strokeDashoffset = offset;
+
+  for (let i = 0; i < TOTAL_SESSIONS; i++) {
+    const dot = document.getElementById("fdot-" + i);
+    if (!dot) continue;
+    dot.className = i < focusSession ? "focus-dot done" : i === focusSession ? "focus-dot active" : "focus-dot";
+  }
+}
+
+function markSessionDone(i) {
+  const dot = document.getElementById("fdot-" + i);
+  if (dot) dot.className = "focus-dot done";
+}
+
+function resetDots() {
+  for (let i = 0; i < TOTAL_SESSIONS; i++) {
+    const dot = document.getElementById("fdot-" + i);
+    if (dot) dot.className = i === 0 ? "focus-dot active" : "focus-dot";
+  }
+}
+
+function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = "sine"; osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.8);
+  } catch(e) {}
+}
