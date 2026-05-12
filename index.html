@@ -8,7 +8,36 @@
 </head>
 <body>
 
+  <div class="top-bar">
   <h1>HabitFlow</h1>
+  <button class="focus-btn" onclick="openFocus()">🍅 Focus Mode</button>
+</div>
+
+<!-- FOCUS MODE OVERLAY -->
+<div class="focus-overlay" id="focus-overlay">
+  <div class="focus-inner">
+    <div class="focus-mode-label" id="focus-mode-label">WORK SESSION</div>
+    <div class="focus-session-count" id="focus-session-count">Session 1 of 4</div>
+    <div class="focus-ring-wrap">
+      <svg class="focus-ring" viewBox="0 0 120 120">
+        <circle class="focus-ring-bg" cx="60" cy="60" r="54"/>
+        <circle class="focus-ring-fill" id="focus-ring-fill" cx="60" cy="60" r="54"/>
+      </svg>
+      <div class="focus-timer" id="focus-timer">25:00</div>
+    </div>
+    <div class="focus-controls">
+      <button class="focus-control-btn" onclick="toggleFocus()" id="focus-start-btn">▶ Start</button>
+      <button class="focus-control-btn secondary" onclick="resetFocus()">↺ Reset</button>
+    </div>
+    <div class="focus-dots">
+      <span class="focus-dot active" id="fdot-0"></span>
+      <span class="focus-dot" id="fdot-1"></span>
+      <span class="focus-dot" id="fdot-2"></span>
+      <span class="focus-dot" id="fdot-3"></span>
+    </div>
+    <button class="focus-close-btn" onclick="closeFocus()">✕ Exit Focus Mode</button>
+  </div>
+</div>
 
   <!-- TWO-COLUMN LAYOUT -->
   <div class="layout">
