@@ -1,15 +1,10 @@
 /* ============================================================
    style.css — HabitFlow
-   Desktop-first. Clean. Structured. Sharp.
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
   --blue: #4f6ef7;
@@ -25,14 +20,11 @@
   --red: #f87171;
   --orange: #fb923c;
   --purple: #a78bfa;
-  --content-max: 900px;
   --radius: 14px;
   --radius-sm: 8px;
 }
 
-html, body {
-  height: 100%;
-}
+html, body { height: 100%; }
 
 body {
   background: var(--surface);
@@ -40,90 +32,72 @@ body {
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   min-height: 100vh;
-  padding: 40px 24px 80px;
+  padding: 40px 32px 80px;
 }
 
 /* ============================================================
-   PAGE TITLE
+   PAGE WRAPPER — centers everything, max width
    ============================================================ */
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.header {
+  margin-bottom: 32px;
+}
 
 h1 {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
-  letter-spacing: -1px;
-  margin-bottom: 36px;
+  letter-spacing: -1.5px;
   color: var(--text);
-  width: 100%;
-  max-width: var(--content-max);
 }
 
 /* ============================================================
-   TWO-COLUMN LAYOUT
-   Left: profile + AI coach
-   Right: add habit + habit list
+   MAIN GRID
+   Left column: profile card (fixed width, square-ish)
+   Right column: action buttons + habits + AI output
    ============================================================ */
 
-.layout {
-  width: 100%;
-  max-width: var(--content-max);
+.main-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-@media (min-width: 760px) {
-  .layout {
-    grid-template-columns: 260px 1fr;
-    align-items: start;
-    gap: 20px;
-  }
-}
-
-.col-left {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.col-right {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  align-items: start;
 }
 
 /* ============================================================
-   SHARED CARD BASE
+   LEFT COLUMN — profile
    ============================================================ */
 
-.profile-card,
-.ai-section,
-.habit-card {
+.col-profile {
+  position: sticky;
+  top: 32px;
+}
+
+.profile-card {
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: 22px;
   width: 100%;
 }
 
-/* ============================================================
-   PROFILE CARD
-   ============================================================ */
-
-.profile-card h2,
-.ai-section h2 {
+.profile-card h2 {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--blue);
   margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .profile-grid {
@@ -135,12 +109,12 @@ h1 {
 .profile-grid input,
 .profile-grid select {
   width: 100%;
-  padding: 9px 11px;
+  padding: 9px 10px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--card-border);
   background: var(--surface);
   color: var(--text);
-  font-size: 13px;
+  font-size: 12px;
   font-family: 'DM Sans', sans-serif;
   outline: none;
   transition: border-color 0.2s;
@@ -176,37 +150,60 @@ h1 {
 }
 
 /* ============================================================
-   ADD HABIT BUTTON — compact, not full-width
+   RIGHT COLUMN
    ============================================================ */
 
-.input-container {
-  width: 100%;
+.col-main {
   display: flex;
-  gap: 10px;
-  align-items: center;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.input-container button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 20px;
-  background: var(--blue);
-  border: none;
+/* ============================================================
+   4 ACTION BUTTONS — equal width in a row
+   ============================================================ */
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.action-btn {
+  padding: 12px 10px;
   border-radius: var(--radius-sm);
-  color: #fff;
+  border: 1px solid var(--card-border);
   font-size: 13px;
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-  width: auto;
+  text-align: center;
+  transition: all 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.input-container button:hover {
-  background: var(--blue-dark);
-  transform: translateY(-1px);
+.action-btn.primary {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
 }
+.action-btn.primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+
+.action-btn.focus {
+  background: transparent;
+  color: var(--orange);
+  border-color: rgba(251, 146, 60, 0.3);
+}
+.action-btn.focus:hover { background: rgba(251,146,60,0.08); border-color: var(--orange); }
+
+.action-btn.ai {
+  background: var(--surface);
+  color: var(--text-muted);
+  border-color: var(--card-border);
+}
+.action-btn.ai:hover { border-color: var(--blue); color: var(--text); background: var(--blue-dim); }
 
 /* ============================================================
    HABIT LIST
@@ -220,13 +217,15 @@ h1 {
 }
 
 .habit-card {
-  padding: 16px 18px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  width: 100%;
   transition: border-color 0.2s;
 }
 
-.habit-card:hover {
-  border-color: #2e2e3c;
-}
+.habit-card:hover { border-color: #2e2e3c; }
 
 .habit-header {
   display: flex;
@@ -310,55 +309,27 @@ input[type="range"] {
   font-family: 'DM Mono', monospace;
 }
 
-.progress-bar-bg {
-  background: #1e1e28;
-  border-radius: 4px;
-  height: 4px;
-  width: 100%;
-}
-
+.progress-bar-bg { background: #1e1e28; border-radius: 4px; height: 4px; width: 100%; }
 .progress-bar-fill {
   background: linear-gradient(90deg, var(--blue), var(--purple));
-  border-radius: 4px;
-  height: 4px;
-  transition: width 0.4s ease;
+  border-radius: 4px; height: 4px; transition: width 0.4s ease;
 }
 
-.quit-today {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
+.quit-today { margin-top: 10px; display: flex; align-items: center; gap: 10px; }
 .quit-today span { font-size: 12px; color: var(--text-muted); }
 
 .quit-today input[type="number"] {
-  width: 68px;
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid var(--card-border);
-  background: var(--surface);
-  color: var(--text);
-  text-align: center;
-  font-size: 13px;
-  font-family: 'DM Mono', monospace;
-  outline: none;
+  width: 68px; padding: 6px; border-radius: 6px;
+  border: 1px solid var(--card-border); background: var(--surface);
+  color: var(--text); text-align: center; font-size: 13px;
+  font-family: 'DM Mono', monospace; outline: none;
 }
 
 .quit-today button {
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  background: var(--blue);
-  border: none;
-  border-radius: 6px;
-  color: #fff;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: background 0.2s;
+  padding: 6px 14px; font-size: 12px; font-weight: 600;
+  background: var(--blue); border: none; border-radius: 6px;
+  color: #fff; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s;
 }
-
 .quit-today button:hover { background: var(--blue-dark); }
 
 .week-plan { margin-top: 10px; font-size: 11px; color: var(--text-dim); }
@@ -373,68 +344,40 @@ input[type="range"] {
 .check-label { font-size: 13px; color: var(--text-muted); }
 
 /* ============================================================
-   AI SECTION — two buttons side by side
+   AI OUTPUT — same width as habits, below them
    ============================================================ */
 
-.ai-section { padding: 18px 20px; }
-
-.ai-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.ai-btn {
-  padding: 11px 10px;
-  background: var(--surface);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-size: 12px;
-  font-weight: 500;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-  text-align: center;
-  line-height: 1.5;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.ai-btn:hover {
-  border-color: var(--blue);
-  background: var(--blue-dim);
-}
-
-.ai-btn:disabled { color: var(--text-dim); cursor: not-allowed; }
-
 .ai-output {
-  background: var(--surface);
+  background: var(--card);
   border: 1px solid var(--card-border);
-  border-radius: var(--radius-sm);
-  padding: 14px;
+  border-radius: var(--radius);
+  padding: 20px;
   font-size: 13px;
   color: var(--text-muted);
-  line-height: 1.8;
+  line-height: 1.9;
   display: none;
-  margin-top: 10px;
   white-space: pre-wrap;
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 860px;
-  max-height: 340px;
-  overflow-y: auto;
-  z-index: 50;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  width: 100%;
 }
 
 .ai-loading {
   color: var(--text-dim);
   font-size: 12px;
   display: none;
-  margin-top: 10px;
   font-style: italic;
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+#list p {
+  color: var(--text-dim);
+  font-size: 13px;
+  text-align: center;
+  padding: 40px 0;
+  border: 1px dashed var(--card-border);
+  border-radius: var(--radius);
 }
 
 /* ============================================================
@@ -446,7 +389,7 @@ input[type="range"] {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0,0,0,0.8);
   backdrop-filter: blur(6px);
   z-index: 100;
   justify-content: center;
@@ -465,68 +408,35 @@ input[type="range"] {
   max-width: 420px;
 }
 
-.modal h2 {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 18px;
-  color: var(--text);
+.modal h2 { font-size: 16px; font-weight: 700; margin-bottom: 18px; color: var(--text); }
+
+.modal input, .modal select {
+  width: 100%; padding: 10px 12px; border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border); background: var(--surface);
+  color: var(--text); margin-bottom: 8px; font-size: 13px;
+  font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s;
 }
 
-.modal input,
-.modal select {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--card-border);
-  background: var(--surface);
-  color: var(--text);
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.modal input:focus,
-.modal select:focus { border-color: var(--blue); }
+.modal input:focus, .modal select:focus { border-color: var(--blue); }
 .modal input::placeholder { color: var(--text-dim); }
 
-.habit-type-selector {
-  display: flex;
-  gap: 8px;
-  margin: 4px 0 10px;
-  flex-wrap: wrap;
-}
+.habit-type-selector { display: flex; gap: 8px; margin: 4px 0 10px; flex-wrap: wrap; }
 
 .habit-type-btn {
-  padding: 6px 14px;
-  border-radius: 6px;
-  border: 1px solid var(--card-border);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 12px;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.15s;
+  padding: 6px 14px; border-radius: 6px; border: 1px solid var(--card-border);
+  background: transparent; color: var(--text-muted); cursor: pointer;
+  font-size: 12px; font-family: 'DM Sans', sans-serif; transition: all 0.15s;
 }
-
 .habit-type-btn:hover { border-color: var(--blue); color: var(--text); }
 .habit-type-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
 
 .modal-actions { display: flex; gap: 8px; margin-top: 14px; }
 
 .modal-actions button {
-  flex: 1;
-  padding: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: background 0.2s;
+  flex: 1; padding: 10px; font-size: 13px; font-weight: 600;
+  border: none; border-radius: var(--radius-sm); cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: background 0.2s;
 }
-
 .modal-actions button:last-child { background: var(--blue); color: #fff; }
 .modal-actions button:last-child:hover { background: var(--blue-dark); }
 
@@ -539,56 +449,13 @@ input[type="range"] {
 .extra-fields { display: none; }
 
 .field-label {
-  font-size: 10px;
-  color: var(--text-dim);
-  margin-bottom: 4px;
-  margin-top: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
+  font-size: 10px; color: var(--text-dim); margin-bottom: 4px;
+  margin-top: 8px; text-transform: uppercase; letter-spacing: 0.8px;
 }
 
 /* ============================================================
-   EMPTY STATE
+   FOCUS MODE OVERLAY
    ============================================================ */
-
-#list p {
-  color: var(--text-dim);
-  font-size: 13px;
-  text-align: center;
-  padding: 40px 0;
-  border: 1px dashed var(--card-border);
-  border-radius: var(--radius);
-}
-
-/* ============================================================
-   MOBILE
-   ============================================================ */
-
-@media (max-width: 759px) {
-  h1 { font-size: 24px; margin-bottom: 24px; }
-
-  .ai-buttons { grid-template-columns: 1fr; }
-
-  .input-container button {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-.top-bar {
-  width: 100%; max-width: var(--content-max);
-  display: flex; align-items: center;
-  justify-content: space-between; margin-bottom: 36px;
-}
-.top-bar h1 { margin-bottom: 0; }
-
-.focus-btn {
-  padding: 10px 16px; background: transparent;
-  border: 1px solid var(--card-border); border-radius: var(--radius-sm);
-  color: var(--text-muted); font-size: 13px; font-weight: 500;
-  font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
-}
-.focus-btn:hover { border-color: var(--orange); color: var(--orange); background: rgba(251,146,60,0.08); }
 
 .focus-overlay {
   display: none; position: fixed; inset: 0;
@@ -597,7 +464,7 @@ input[type="range"] {
 }
 .focus-overlay.open { display: flex; }
 
-.focus-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; position: relative; }
+.focus-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; }
 
 .focus-mode-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); }
 .focus-mode-label.break { color: var(--green); }
@@ -641,3 +508,22 @@ input[type="range"] {
   cursor: pointer; padding: 6px 12px; border-radius: 6px; transition: color 0.2s; margin-top: 8px;
 }
 .focus-close-btn:hover { color: var(--text); }
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 760px) {
+  body { padding: 24px 16px 60px; }
+  h1 { font-size: 26px; }
+
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .col-profile { position: static; }
+
+  .action-buttons {
+    grid-template-columns: 1fr 1fr;
+  }
+}
