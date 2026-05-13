@@ -9,9 +9,7 @@
 // YOUR API KEY — get one free at console.groq.com
 // Paste it between the quotes below
 // ----------------------------------------------------------
-const API_KEY = localStorage.getItem("groq_api_key") || prompt("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
-");
-localStorage.setItem("groq_api_key", API_KEY);
+const apiKey = process.env.AIHABITTRACKERAPIKEY;
 
 // HABITS LIST
 // This is where all habits are stored while the app is open.
