@@ -8,94 +8,89 @@
 </head>
 <body>
 
-  <div class="top-bar">
-  <h1>HabitFlow</h1>
-  <button class="focus-btn" onclick="openFocus()">🍅 Focus Mode</button>
-</div>
-
-<!-- FOCUS MODE OVERLAY -->
-<div class="focus-overlay" id="focus-overlay">
-  <div class="focus-inner">
-    <div class="focus-mode-label" id="focus-mode-label">WORK SESSION</div>
-    <div class="focus-session-count" id="focus-session-count">Session 1 of 4</div>
-    <div class="focus-ring-wrap">
-      <svg class="focus-ring" viewBox="0 0 120 120">
-        <circle class="focus-ring-bg" cx="60" cy="60" r="54"/>
-        <circle class="focus-ring-fill" id="focus-ring-fill" cx="60" cy="60" r="54"/>
-      </svg>
-      <div class="focus-timer" id="focus-timer">25:00</div>
+  <!-- FOCUS MODE OVERLAY -->
+  <div class="focus-overlay" id="focus-overlay">
+    <div class="focus-inner">
+      <div class="focus-mode-label" id="focus-mode-label">WORK SESSION</div>
+      <div class="focus-session-count" id="focus-session-count">Session 1 of 4</div>
+      <div class="focus-ring-wrap">
+        <svg class="focus-ring" viewBox="0 0 120 120">
+          <circle class="focus-ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="focus-ring-fill" id="focus-ring-fill" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="focus-timer" id="focus-timer">25:00</div>
+      </div>
+      <div class="focus-controls">
+        <button class="focus-control-btn" onclick="toggleFocus()" id="focus-start-btn">▶ Start</button>
+        <button class="focus-control-btn secondary" onclick="resetFocus()">↺ Reset</button>
+      </div>
+      <div class="focus-dots">
+        <span class="focus-dot active" id="fdot-0"></span>
+        <span class="focus-dot" id="fdot-1"></span>
+        <span class="focus-dot" id="fdot-2"></span>
+        <span class="focus-dot" id="fdot-3"></span>
+      </div>
+      <button class="focus-close-btn" onclick="closeFocus()">✕ Exit Focus Mode</button>
     </div>
-    <div class="focus-controls">
-      <button class="focus-control-btn" onclick="toggleFocus()" id="focus-start-btn">▶ Start</button>
-      <button class="focus-control-btn secondary" onclick="resetFocus()">↺ Reset</button>
-    </div>
-    <div class="focus-dots">
-      <span class="focus-dot active" id="fdot-0"></span>
-      <span class="focus-dot" id="fdot-1"></span>
-      <span class="focus-dot" id="fdot-2"></span>
-      <span class="focus-dot" id="fdot-3"></span>
-    </div>
-    <button class="focus-close-btn" onclick="closeFocus()">✕ Exit Focus Mode</button>
   </div>
-</div>
 
-  <!-- TWO-COLUMN LAYOUT -->
-  <div class="layout">
+  <!-- PAGE WRAPPER -->
+  <div class="page">
 
-    <!-- LEFT COLUMN: Profile + AI Coach -->
-    <div class="col-left">
+    <!-- HEADER -->
+    <div class="header">
+      <h1>HabitFlow</h1>
+    </div>
 
-      <!-- PROFILE CARD -->
-      <div class="profile-card">
-        <h2>👤 Your Profile</h2>
-        <div class="profile-grid">
-          <input id="p-name" placeholder="Name" />
-          <select id="p-gender">
-            <option value="" disabled selected>Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
-          <input id="p-age" type="number" placeholder="Age" />
-          <input id="p-weight" type="number" placeholder="Weight (kg)" />
-          <input id="p-height" type="number" placeholder="Height (cm)" />
-          <input id="p-goal" placeholder="Main goal" />
+    <!-- MAIN GRID: left = profile, right = everything else -->
+    <div class="main-grid">
+
+      <!-- LEFT: Profile card (square-ish) -->
+      <div class="col-profile">
+        <div class="profile-card">
+          <h2>👤 Your Profile</h2>
+          <div class="profile-grid">
+            <input id="p-name" placeholder="Name" />
+            <select id="p-gender">
+              <option value="" disabled selected>Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+            <input id="p-age" type="number" placeholder="Age" />
+            <input id="p-weight" type="number" placeholder="Weight (kg)" />
+            <input id="p-height" type="number" placeholder="Height (cm)" />
+            <input id="p-goal" placeholder="Main goal" />
+          </div>
+          <button class="save-profile-btn" onclick="saveProfile()">Save Profile</button>
+          <div class="profile-saved" id="profile-saved">✓ Saved</div>
         </div>
-        <button class="save-profile-btn" onclick="saveProfile()">Save Profile</button>
-        <div class="profile-saved" id="profile-saved">✓ Saved</div>
       </div>
 
-      <!-- AI COACH -->
-      <div class="ai-section">
-        <h2>🤖 AI Coach</h2>
-        <div class="ai-buttons">
-          <button class="ai-btn" onclick="getTomorrowPlan()">📅 Tomorrow's Plan</button>
-          <button class="ai-btn" onclick="getDailyTip()">💡 Get a Tip</button>
+      <!-- RIGHT: buttons + habits + ai output -->
+      <div class="col-main">
+
+        <!-- 4 equal buttons row -->
+        <div class="action-buttons">
+          <button class="action-btn primary" onclick="openModal()">+ Add Habit</button>
+          <button class="action-btn focus" onclick="openFocus()">🍅 Focus</button>
+          <button class="action-btn ai" onclick="getTomorrowPlan()">📅 Tomorrow's Plan</button>
+          <button class="action-btn ai" onclick="getDailyTip()">💡 Get a Tip</button>
         </div>
+
+        <!-- AI loading indicator -->
         <div class="ai-loading" id="ai-loading">Thinking...</div>
+
+        <!-- Habit list -->
+        <div id="list"></div>
+
+        <!-- AI output — same width as habits, below -->
         <div class="ai-output" id="ai-output"></div>
+
       </div>
 
     </div>
-    <!-- END LEFT COLUMN -->
-
-    <!-- RIGHT COLUMN: Add Habit + Habit List -->
-    <div class="col-right">
-
-      <!-- ADD HABIT BUTTON -->
-      <div class="input-container">
-  <button onclick="openModal()">+ Add Habit</button>
-  <button class="focus-btn" onclick="openFocus()">🍅 Focus</button>
-</div>
-
-      <!-- HABIT LIST -->
-      <div id="list"></div>
-
-    </div>
-    <!-- END RIGHT COLUMN -->
-
   </div>
-  <!-- END LAYOUT -->
 
   <!-- ADD HABIT MODAL -->
   <div class="modal-overlay" id="modal">
@@ -111,7 +106,6 @@
       <div style="margin-top:14px;">
         <input id="m-name" placeholder="Habit name (e.g. Drink water)" />
 
-        <!-- Slider fields -->
         <div class="extra-fields" id="fields-slider">
           <div class="field-label">Unit (e.g. liters, steps, hours)</div>
           <input id="m-unit" placeholder="Unit" />
@@ -121,7 +115,6 @@
           <input id="m-goal-val" type="number" placeholder="e.g. 2" />
         </div>
 
-        <!-- Quit fields -->
         <div class="extra-fields" id="fields-quit">
           <div class="field-label">How many per day right now?</div>
           <input id="m-current" type="number" placeholder="e.g. 20" />
@@ -129,7 +122,6 @@
           <input id="m-weeks" type="number" placeholder="e.g. 8" />
         </div>
 
-        <!-- Checkbox fields -->
         <div class="extra-fields" id="fields-checkbox">
           <div class="field-label">Description (optional)</div>
           <input id="m-desc" placeholder="e.g. 30 min morning run" />
