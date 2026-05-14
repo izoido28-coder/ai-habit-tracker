@@ -617,6 +617,10 @@ function openFocus() {
   updateFocusDisplay();
 }
 
+function closeFocus() {
+  document.getElementById("focus-overlay").classList.remove("open");
+}
+
 function closeHydration() {
   document.getElementById("hydration-overlay").classList.remove("open");
   // removed pauseHydration() so it keeps running in background
@@ -751,7 +755,6 @@ function openHydration() {
 
 function closeHydration() {
   document.getElementById("hydration-overlay").classList.remove("open");
-  pauseHydration();
 }
 
 function selectActivity(activity, btn) {
