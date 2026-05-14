@@ -101,13 +101,14 @@
       <!-- RIGHT: buttons + habits + ai output -->
       <div class="col-main">
 
-        <!-- 4 equal buttons row -->
-        <div class="action-buttons">
-          <button class="action-btn primary" onclick="openModal()">+ Add Habit</button>
-          <button class="action-btn focus" onclick="openFocus()">🍅 Focus</button>
-          <button class="action-btn ai" onclick="getTomorrowPlan()">📅 Tomorrow's Plan</button>
-          <button class="action-btn ai" onclick="getDailyTip()">💡 Get a Tip</button>
-        </div>
+        <!-- 5 equal buttons row -->
+<div class="action-buttons">
+  <button class="action-btn primary" onclick="openModal()">+ Add Habit</button>
+  <button class="action-btn focus" onclick="openFocus()">🍅 Focus</button>
+  <button class="action-btn hydration" onclick="openHydration()">💧 Hydration</button>
+  <button class="action-btn ai" onclick="getTomorrowPlan()">📅 Tomorrow's Plan</button>
+  <button class="action-btn ai" onclick="getDailyTip()">💡 Get a Tip</button>
+</div>
 
         <!-- AI loading indicator -->
         <div class="ai-loading" id="ai-loading">Thinking...</div>
