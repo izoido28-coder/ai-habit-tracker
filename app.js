@@ -731,3 +731,109 @@ function playBeep() {
     osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.8);
   } catch(e) {}
 }
+
+// ============================================================
+//  HYDRATION TIMER
+// ============================================================
+
+const HYDRATION_PRESETS = { studying: 45, exercising: 15, resting: 60 };
+
+let hydrationInterval  = null;
+let hydrationRunning   = false;
+let hydrationSecsLeft  = 45 * 60;
+let hydrationTotalSecs = 45 * 60;
+let hydrationActivity  = "studying";
+
+function openHydration() {
+  document.getElementById("hydration-overlay").classList.add("open");
+  updateHydrationDisplay();
+}
+
+function closeHydration() {
+  document.getElementById("hydration-overlay").classList.remove("open");
+  pauseHydration();
+}
+
+function selectActivity(activity, btn) {
+  hydrationActivity  = activity;
+  hydrationTotalSecs = HYDRATION_PRESETS[activity] * 60;
+  hydrationSecsLeft  = hydrationTotalSecs;
+  if (hydrationRunning) { pauseHydration(); startHydration(); }
+  document.querySelectorAll(".hydration-activity-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("hydration-alert").style.display = "none";
+  updateHydrationDisplay();
+}
+
+function toggleHydration() { hydrationRunning ? pauseHydration() : startHydration(); }
+
+function startHydration() {
+  hydrationRunning = true;
+  document.getElementById("hydration-start-btn").textContent = "⏸ Pause";
+  document.getElementById("hydration-alert").style.display = "none";
+  hydrationInterval = setInterval(() => {
+    hydrationSecsLeft--;
+    if (hydrationSecsLeft <= 0) {
+      clearInterval(hydrationInterval);
+      hydrationRunning = false;
+      playHydrationBeep();
+      document.getElementById("hydration-alert").style.display = "block";
+      document.getElementById("hydration-start-btn").textContent = "▶ Start";
+      hydrationSecsLeft = hydrationTotalSecs;
+      updateHydrationDisplay();
+      setTimeout(() => {
+        document.getElementById("hydration-alert").style.display = "none";
+        startHydration();
+      }, 5000);
+      return;
+    }
+    updateHydrationDisplay();
+  }, 1000);
+}
+
+function pauseHydration() {
+  clearInterval(hydrationInterval);
+  hydrationRunning = false;
+  document.getElementById("hydration-start-btn").textContent = "▶ Start";
+}
+
+function resetHydration() {
+  pauseHydration();
+  hydrationSecsLeft = hydrationTotalSecs;
+  document.getElementById("hydration-alert").style.display = "none";
+  updateHydrationDisplay();
+}
+
+function updateHydrationDisplay() {
+  const mins = Math.floor(hydrationSecsLeft / 60);
+  const secs = hydrationSecsLeft % 60;
+  document.getElementById("hydration-timer").textContent =
+    String(mins).padStart(2,"0") + ":" + String(secs).padStart(2,"0");
+
+  const labels = {
+    studying:   "Studying — drink every 45 min",
+    exercising: "Exercising — drink every 15 min",
+    resting:    "Resting — drink every 60 min"
+  };
+  document.getElementById("hydration-session-count").textContent = labels[hydrationActivity];
+
+  const elapsed = hydrationTotalSecs - hydrationSecsLeft;
+  const offset  = 339.3 - (elapsed / hydrationTotalSecs) * 339.3;
+  document.getElementById("hydration-ring-fill").style.strokeDashoffset = offset;
+}
+
+function playHydrationBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [440, 660].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = "sine"; osc.frequency.value = freq;
+      const start = ctx.currentTime + i * 0.3;
+      gain.gain.setValueAtTime(0.3, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.4);
+      osc.start(start); osc.stop(start + 0.4);
+    });
+  } catch(e) {}
+}
