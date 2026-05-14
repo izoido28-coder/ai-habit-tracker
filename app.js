@@ -9,7 +9,7 @@
 // YOUR API KEY — get one free at console.groq.com
 // Paste it between the quotes below
 // ----------------------------------------------------------
-const API_KEY = "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";
+const API_KEY = "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";
 
 // HABITS LIST
 // This is where all habits are stored while the app is open.
