@@ -527,3 +527,35 @@ input[type="range"] {
     grid-template-columns: 1fr 1fr;
   }
 }
+.action-btn.hydration { background: transparent; color: #22d3ee; border-color: rgba(34,211,238,0.3); }
+.action-btn.hydration:hover { background: rgba(34,211,238,0.08); border-color: #22d3ee; }
+
+.hydration-label { color: #22d3ee !important; }
+.hydration-ring { stroke: #22d3ee !important; }
+.hydration-start-btn { background: #22d3ee !important; color: #0a0a0e !important; }
+
+.hydration-activity-selector { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.hydration-subtitle { font-size: 12px; color: #6b6b80; letter-spacing: 0.5px; }
+.hydration-activity-btns { display: flex; gap: 10px; }
+
+.hydration-activity-btn {
+  padding: 14px 20px; border-radius: 8px; border: 1px solid #242430;
+  background: #16161c; color: #6b6b80; cursor: pointer; font-size: 13px;
+  font-weight: 500; font-family: 'DM Sans', sans-serif;
+  text-align: center; transition: all 0.2s; line-height: 1.6;
+}
+.hydration-activity-btn span { display: block; font-size: 11px; color: #3a3a48; margin-top: 2px; }
+.hydration-activity-btn:hover { border-color: #22d3ee; color: #f0f0f5; }
+.hydration-activity-btn.active { background: rgba(34,211,238,0.1); border-color: #22d3ee; color: #22d3ee; }
+.hydration-activity-btn.active span { color: #22d3ee; opacity: 0.7; }
+
+.hydration-alert {
+  background: rgba(34,211,238,0.12); border: 1px solid #22d3ee;
+  border-radius: 8px; padding: 14px 28px; font-size: 18px;
+  font-weight: 600; color: #22d3ee; letter-spacing: 0.5px;
+  animation: pulse-alert 0.6s ease-in-out infinite alternate;
+}
+@keyframes pulse-alert {
+  from { opacity: 0.7; transform: scale(0.98); }
+  to   { opacity: 1;   transform: scale(1.02); }
+}
