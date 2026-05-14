@@ -9,7 +9,7 @@
 // YOUR API KEY — get one free at console.groq.com
 // Paste it between the quotes below
 // ----------------------------------------------------------
-const API_KEY = "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";
+const API_KEY = localStorage.getItem("groqKey") || "";
 
 // HABITS LIST
 // This is where all habits are stored while the app is open.
