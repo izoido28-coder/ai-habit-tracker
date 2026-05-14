@@ -34,6 +34,37 @@
     </div>
   </div>
 
+  <!-- HYDRATION OVERLAY -->
+<div class="focus-overlay" id="hydration-overlay">
+  <div class="focus-inner">
+    <div class="focus-mode-label hydration-label" id="hydration-label">HYDRATION TIMER</div>
+    <div class="hydration-activity-selector" id="hydration-activity-selector">
+      <p class="hydration-subtitle">What are you doing?</p>
+      <div class="hydration-activity-btns">
+        <button class="hydration-activity-btn active" onclick="selectActivity('studying', this)">📚 Studying<br><span>every 45 min</span></button>
+        <button class="hydration-activity-btn" onclick="selectActivity('exercising', this)">🏃 Exercising<br><span>every 15 min</span></button>
+        <button class="hydration-activity-btn" onclick="selectActivity('resting', this)">🛋️ Resting<br><span>every 60 min</span></button>
+      </div>
+    </div>
+    <div class="focus-session-count" id="hydration-session-count">Next drink in...</div>
+    <div class="focus-ring-wrap">
+      <svg class="focus-ring" viewBox="0 0 120 120">
+        <circle class="focus-ring-bg" cx="60" cy="60" r="54"/>
+        <circle class="focus-ring-fill hydration-ring" id="hydration-ring-fill" cx="60" cy="60" r="54"/>
+      </svg>
+      <div class="focus-timer" id="hydration-timer">45:00</div>
+    </div>
+    <div class="hydration-alert" id="hydration-alert" style="display:none;">
+      💧 Time to drink water!
+    </div>
+    <div class="focus-controls">
+      <button class="focus-control-btn hydration-start-btn" onclick="toggleHydration()" id="hydration-start-btn">▶ Start</button>
+      <button class="focus-control-btn secondary" onclick="resetHydration()">↺ Reset</button>
+    </div>
+    <button class="focus-close-btn" onclick="closeHydration()">✕ Exit Hydration Timer</button>
+  </div>
+</div>
+  
   <!-- PAGE WRAPPER -->
   <div class="page">
 
