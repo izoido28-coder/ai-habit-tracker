@@ -458,56 +458,135 @@ input[type="range"] {
    ============================================================ */
 
 .focus-overlay {
-  display: none; position: fixed; inset: 0;
-  background: #0a0a0e; z-index: 200;
-  flex-direction: column; align-items: center; justify-content: center;
+  background:
+    radial-gradient(circle at top, rgba(167,139,250,0.12), transparent 34%),
+    linear-gradient(180deg, rgba(10,10,14,0.72), rgba(10,10,14,0.92)),
+    url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
 }
-.focus-overlay.open { display: flex; }
 
-.focus-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-
-.focus-mode-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); }
-.focus-mode-label.break { color: var(--green); }
-.focus-session-count { font-size: 13px; color: var(--text-dim); }
-
-.focus-ring-wrap {
-  position: relative; width: 220px; height: 220px;
-  display: flex; align-items: center; justify-content: center;
+.focus-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent 40%, rgba(0,0,0,0.18));
+  pointer-events: none;
 }
+
+.focus-inner {
+  position: relative;
+  width: min(1120px, calc(100vw - 48px));
+  height: min(720px, calc(100vh - 48px));
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  align-items: center;
+  z-index: 1;
+}
+
+.focus-art {
+  height: 100%;
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
+    url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.06);
+  filter: saturate(0.85) contrast(1.05);
+}
+
+.focus-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 36px 28px;
+  border-radius: 28px;
+  background: rgba(15,15,19,0.48);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.28);
+  backdrop-filter: blur(16px);
+}
+
+.focus-topline {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
 .focus-timer {
-  position: absolute; font-size: 56px; font-weight: 700;
-  font-family: 'DM Mono', monospace; color: var(--text); letter-spacing: -2px; z-index: 1;
-}
-.focus-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-.focus-ring-bg { fill: none; stroke: #1e1e28; stroke-width: 6; }
-.focus-ring-fill {
-  fill: none; stroke: var(--orange); stroke-width: 6; stroke-linecap: round;
-  stroke-dasharray: 339.3; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.4s;
-}
-.focus-ring-fill.break { stroke: var(--green); }
-
-.focus-controls { display: flex; gap: 12px; }
-.focus-control-btn {
-  padding: 12px 32px; border-radius: var(--radius-sm); border: none;
-  font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif;
-  cursor: pointer; transition: all 0.2s; background: var(--orange); color: #fff;
-}
-.focus-control-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-.focus-control-btn.secondary {
-  background: #1e1e28; color: var(--text-muted); border: 1px solid var(--card-border);
+  position: static;
+  font-size: clamp(64px, 9vw, 108px);
+  line-height: 1;
+  letter-spacing: -4px;
+  text-shadow: 0 10px 40px rgba(0,0,0,0.35);
 }
 
-.focus-dots { display: flex; gap: 10px; }
-.focus-dot { width: 8px; height: 8px; border-radius: 50%; background: #2a2a36; transition: background 0.3s; }
-.focus-dot.active { background: var(--orange); }
-.focus-dot.done { background: var(--green); }
+.focus-controls {
+  gap: 10px;
+}
+
+.focus-control-btn, .focus-music-btn {
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+}
+
+.focus-music-btn {
+  padding: 14px 18px;
+  border: 1px solid rgba(167,139,250,0.28);
+  background: rgba(167,139,250,0.10);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.focus-music-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--purple);
+  background: rgba(167,139,250,0.16);
+}
+
+.focus-side {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
 
 .focus-close-btn {
-  background: transparent; border: none; color: var(--text-dim);
-  font-size: 13px; font-family: 'DM Sans', sans-serif;
-  cursor: pointer; padding: 6px 12px; border-radius: 6px; transition: color 0.2s; margin-top: 8px;
+  margin-top: 0;
 }
-.focus-close-btn:hover { color: var(--text); }
+
+.focus-dots {
+  margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+  .focus-inner {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .focus-art {
+    min-height: 180px;
+  }
+
+  .focus-side {
+    position: static;
+    transform: none;
+    align-items: center;
+  }
+}
 
 /* ============================================================
    MOBILE
