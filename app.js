@@ -604,7 +604,8 @@ ${getHabitsText()}
 const WORK_MINS = 25;
 const BREAK_MINS = 5;
 const TOTAL_SESSIONS = 4;
-const RING_CIRCUMFERENCE = 339.3;
+let focusMusicOn = false;
+let focusMusicAudio = null;
 
 let focusInterval = null;
 let focusRunning  = false;
