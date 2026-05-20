@@ -683,8 +683,26 @@ function resetFocus() {
 function updateFocusDisplay() {
   const mins = Math.floor(focusSecsLeft / 60);
   const secs = focusSecsLeft % 60;
-  document.getElementById("focus-timer").textContent =
-    String(mins).padStart(2,"0") + ":" + String(secs).padStart(2,"0");
+  document.getElementById('focus-timer').textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+
+  const label = document.getElementById('focus-mode-label');
+  if (focusIsBreak) {
+    label.textContent = 'BREAK';
+    label.className = 'focus-mode-label break';
+  } else {
+    label.textContent = 'WORK SESSION';
+    label.className = 'focus-mode-label';
+  }
+
+  document.getElementById('focus-session-count').textContent =
+    focusIsBreak ? `Break — next session ${focusSession + 2}` : `Session ${focusSession + 1} of ${TOTALSESSIONS}`;
+
+  for (let i = 0; i < TOTALSESSIONS; i++) {
+    const dot = document.getElementById(`fdot-${i}`);
+    if (!dot) continue;
+    dot.className = i < focusSession ? 'focus-dot done' : i === focusSession ? 'focus-dot active' : 'focus-dot';
+  }
+}
 
   const label    = document.getElementById("focus-mode-label");
   const ringFill = document.getElementById("focus-ring-fill");
