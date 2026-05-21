@@ -8,7 +8,6 @@
 </head>
 <body>
 
-
 <!-- FOCUS MODE OVERLAY — rainy window aesthetic -->
 <div class="focus-overlay" id="focus-overlay">
   <div class="rain" id="rain"></div>
@@ -38,7 +37,7 @@
   <button class="focus-exit-btn" onclick="closeFocus()">✕ exit</button>
 </div>
 
-  <!-- HYDRATION OVERLAY -->
+<!-- HYDRATION OVERLAY -->
 <div class="focus-overlay" id="hydration-overlay">
   <div class="focus-inner">
     <div class="focus-mode-label hydration-label" id="hydration-label">HYDRATION TIMER</div>
@@ -68,109 +67,98 @@
     <button class="focus-close-btn" onclick="closeHydration()">✕ Exit Hydration Timer</button>
   </div>
 </div>
-  
-  <!-- PAGE WRAPPER -->
-  <div class="page">
 
-    <!-- HEADER -->
-    <div class="header">
-      <h1>HabitFlow</h1>
+<!-- PAGE WRAPPER -->
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>HabitFlow</h1>
+    <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle">☀️</button>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- LEFT: Profile -->
+    <div class="col-profile">
+      <div class="profile-card">
+        <h2>👤 Your Profile</h2>
+        <div class="profile-grid">
+          <input id="p-name" placeholder="Name" />
+          <select id="p-gender">
+            <option value="" disabled selected>Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          <input id="p-age" type="number" placeholder="Age" />
+          <input id="p-weight" type="number" placeholder="Weight (kg)" />
+          <input id="p-height" type="number" placeholder="Height (cm)" />
+          <input id="p-goal" placeholder="Main goal" />
+        </div>
+        <button class="save-profile-btn" onclick="saveProfile()">Save Profile</button>
+        <div class="profile-saved" id="profile-saved">✓ Saved</div>
+      </div>
     </div>
 
-    <!-- MAIN GRID: left = profile, right = everything else -->
-    <div class="main-grid">
+    <!-- RIGHT: buttons + habits + ai output -->
+    <div class="col-main">
 
-      <!-- LEFT: Profile card (square-ish) -->
-      <div class="col-profile">
-        <div class="profile-card">
-          <h2>👤 Your Profile</h2>
-          <div class="profile-grid">
-            <input id="p-name" placeholder="Name" />
-            <select id="p-gender">
-              <option value="" disabled selected>Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-            <input id="p-age" type="number" placeholder="Age" />
-            <input id="p-weight" type="number" placeholder="Weight (kg)" />
-            <input id="p-height" type="number" placeholder="Height (cm)" />
-            <input id="p-goal" placeholder="Main goal" />
-          </div>
-          <button class="save-profile-btn" onclick="saveProfile()">Save Profile</button>
-          <div class="profile-saved" id="profile-saved">✓ Saved</div>
-        </div>
+      <div class="action-buttons">
+        <button class="action-btn primary" onclick="openModal()">+ Add Habit</button>
+        <button class="action-btn focus" onclick="openFocus()">🍅 Focus</button>
+        <button class="action-btn hydration" onclick="openHydration()">💧 Hydration</button>
+        <button class="action-btn ai" onclick="getTomorrowPlan()">📅 Tomorrow's Plan</button>
+        <button class="action-btn ai" onclick="getDailyTip()">💡 Get a Tip</button>
       </div>
 
-      <!-- RIGHT: buttons + habits + ai output -->
-      <div class="col-main">
+      <div class="ai-loading" id="ai-loading">Thinking...</div>
+      <div id="list"></div>
+      <div class="ai-output" id="ai-output"></div>
 
-        <!-- 5 equal buttons row -->
-<div class="action-buttons">
-  <button class="action-btn primary" onclick="openModal()">+ Add Habit</button>
-  <button class="action-btn focus" onclick="openFocus()">🍅 Focus</button>
-  <button class="action-btn hydration" onclick="openHydration()">💧 Hydration</button>
-  <button class="action-btn ai" onclick="getTomorrowPlan()">📅 Tomorrow's Plan</button>
-  <button class="action-btn ai" onclick="getDailyTip()">💡 Get a Tip</button>
+    </div>
+
+  </div>
 </div>
 
-        <!-- AI loading indicator -->
-        <div class="ai-loading" id="ai-loading">Thinking...</div>
-
-        <!-- Habit list -->
-        <div id="list"></div>
-
-        <!-- AI output — same width as habits, below -->
-        <div class="ai-output" id="ai-output"></div>
-
-      </div>
-
+<!-- ADD HABIT MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2>New Habit</h2>
+    <div class="habit-type-selector">
+      <button class="habit-type-btn active" onclick="selectType('slider', this)">💧 Slider</button>
+      <button class="habit-type-btn" onclick="selectType('quit', this)">🚭 Quit</button>
+      <button class="habit-type-btn" onclick="selectType('checkbox', this)">✅ Checkbox</button>
     </div>
-  </div>
-
-  <!-- ADD HABIT MODAL -->
-  <div class="modal-overlay" id="modal">
-    <div class="modal">
-      <h2>New Habit</h2>
-
-      <div class="habit-type-selector">
-        <button class="habit-type-btn active" onclick="selectType('slider', this)">💧 Slider</button>
-        <button class="habit-type-btn" onclick="selectType('quit', this)">🚭 Quit</button>
-        <button class="habit-type-btn" onclick="selectType('checkbox', this)">✅ Checkbox</button>
+    <div style="margin-top:14px;">
+      <input id="m-name" placeholder="Habit name (e.g. Drink water)" />
+      <div class="extra-fields" id="fields-slider">
+        <div class="field-label">Unit (e.g. liters, steps, hours)</div>
+        <input id="m-unit" placeholder="Unit" />
+        <div class="field-label">Max value</div>
+        <input id="m-max" type="number" placeholder="e.g. 3" />
+        <div class="field-label">Daily goal</div>
+        <input id="m-goal-val" type="number" placeholder="e.g. 2" />
       </div>
-
-      <div style="margin-top:14px;">
-        <input id="m-name" placeholder="Habit name (e.g. Drink water)" />
-
-        <div class="extra-fields" id="fields-slider">
-          <div class="field-label">Unit (e.g. liters, steps, hours)</div>
-          <input id="m-unit" placeholder="Unit" />
-          <div class="field-label">Max value</div>
-          <input id="m-max" type="number" placeholder="e.g. 3" />
-          <div class="field-label">Daily goal</div>
-          <input id="m-goal-val" type="number" placeholder="e.g. 2" />
-        </div>
-
-        <div class="extra-fields" id="fields-quit">
-          <div class="field-label">How many per day right now?</div>
-          <input id="m-current" type="number" placeholder="e.g. 20" />
-          <div class="field-label">Target: 0 in how many weeks?</div>
-          <input id="m-weeks" type="number" placeholder="e.g. 8" />
-        </div>
-
-        <div class="extra-fields" id="fields-checkbox">
-          <div class="field-label">Description (optional)</div>
-          <input id="m-desc" placeholder="e.g. 30 min morning run" />
-        </div>
+      <div class="extra-fields" id="fields-quit">
+        <div class="field-label">How many per day right now?</div>
+        <input id="m-current" type="number" placeholder="e.g. 20" />
+        <div class="field-label">Target: 0 in how many weeks?</div>
+        <input id="m-weeks" type="number" placeholder="e.g. 8" />
       </div>
-
-      <div class="modal-actions">
-        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
-        <button onclick="addHabit()">Add Habit</button>
+      <div class="extra-fields" id="fields-checkbox">
+        <div class="field-label">Description (optional)</div>
+        <input id="m-desc" placeholder="e.g. 30 min morning run" />
       </div>
     </div>
+    <div class="modal-actions">
+      <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+      <button onclick="addHabit()">Add Habit</button>
+    </div>
   </div>
+</div>
 
-  <script src="app.js" defer></script>
+<script src="app.js" defer></script>
 </body>
 </html>
