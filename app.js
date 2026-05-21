@@ -614,7 +614,12 @@ let focusSecsLeft = WORK_MINS * 60;
 
 function openFocus() {
   document.getElementById("focus-overlay").classList.add("open");
+  generateRain();
   updateFocusDisplay();
+}
+
+function closeFocus() {
+  document.getElementById("focus-overlay").classList.remove("open");
 }
 
 function closeFocus() {
@@ -688,12 +693,10 @@ function updateFocusDisplay() {
   const label    = document.getElementById("focus-mode-label");
   const ringFill = document.getElementById("focus-ring-fill");
 
-  if (focusIsBreak) {
-    label.textContent = "BREAK"; label.className = "focus-mode-label break";
-    ringFill.className = "focus-ring-fill break";
+if (focusIsBreak) {
+    label.textContent = "BREAK";
   } else {
-    label.textContent = "WORK SESSION"; label.className = "focus-mode-label";
-    ringFill.className = "focus-ring-fill";
+    label.textContent = "FOCUS";
   }
 
   document.getElementById("focus-session-count").textContent = focusIsBreak
@@ -839,4 +842,44 @@ function playHydrationBeep() {
       osc.start(start); osc.stop(start + 0.4);
     });
   } catch(e) {}
+}
+
+// ============================================================
+//  RAIN ANIMATION
+// ============================================================
+
+function generateRain() {
+  const rain = document.getElementById("rain");
+  if (!rain || rain.children.length > 0) return;
+  for (let i = 0; i < 80; i++) {
+    const drop = document.createElement("div");
+    drop.className = "raindrop";
+    drop.style.left = Math.random() * 100 + "vw";
+    drop.style.height = (Math.random() * 60 + 40) + "px";
+    drop.style.animationDuration = (Math.random() * 1.5 + 0.6) + "s";
+    drop.style.animationDelay = (Math.random() * 2) + "s";
+    drop.style.opacity = (Math.random() * 0.4 + 0.1).toString();
+    rain.appendChild(drop);
+  }
+}
+
+// ============================================================
+//  LO-FI MUSIC
+// ============================================================
+
+let musicPlaying = false;
+
+function toggleMusic() {
+  const audio = document.getElementById("lofi-audio");
+  const btn   = document.getElementById("music-btn");
+  if (musicPlaying) {
+    audio.pause();
+    btn.classList.remove("playing");
+    btn.textContent = "🎵";
+  } else {
+    audio.play().catch(() => {});
+    btn.classList.add("playing");
+    btn.textContent = "🔊";
+  }
+  musicPlaying = !musicPlaying;
 }
