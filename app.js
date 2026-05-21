@@ -883,3 +883,23 @@ function toggleMusic() {
   }
   musicPlaying = !musicPlaying;
 }
+
+
+// ============================================================
+//  LIGHT / DARK MODE
+// ============================================================
+
+function toggleTheme() {
+  const isLight = document.body.classList.toggle("light");
+  document.getElementById("theme-toggle").textContent = isLight ? "🌙" : "☀️";
+  localStorage.setItem("theme", isLight ? "light" : "dark");
+}
+
+// Load saved theme on startup — add this inside window.onload
+(function() {
+  if (localStorage.getItem("theme") === "light") {
+    document.body.classList.add("light");
+    const btn = document.getElementById("theme-toggle");
+    if (btn) btn.textContent = "🌙";
+  }
+})();
