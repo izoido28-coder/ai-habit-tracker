@@ -7,6 +7,14 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
+   body.light {
+  --surface: #f4f4f8;
+  --card: #ffffff;
+  --card-border: #e0e0ea;
+  --text: #111118;
+  --text-muted: #55556a;
+  --text-dim: #aaaabd;
+}
   --blue: #4f6ef7;
   --blue-dark: #3a56d4;
   --blue-dim: rgba(79, 110, 247, 0.12);
