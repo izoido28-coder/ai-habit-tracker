@@ -8,31 +8,35 @@
 </head>
 <body>
 
-  <!-- FOCUS MODE OVERLAY -->
-  <div class="focus-overlay" id="focus-overlay">
-    <div class="focus-inner">
-      <div class="focus-mode-label" id="focus-mode-label">WORK SESSION</div>
-      <div class="focus-session-count" id="focus-session-count">Session 1 of 4</div>
-      <div class="focus-ring-wrap">
-        <svg class="focus-ring" viewBox="0 0 120 120">
-          <circle class="focus-ring-bg" cx="60" cy="60" r="54"/>
-          <circle class="focus-ring-fill" id="focus-ring-fill" cx="60" cy="60" r="54"/>
-        </svg>
-        <div class="focus-timer" id="focus-timer">25:00</div>
-      </div>
-      <div class="focus-controls">
-        <button class="focus-control-btn" onclick="toggleFocus()" id="focus-start-btn">▶ Start</button>
-        <button class="focus-control-btn secondary" onclick="resetFocus()">↺ Reset</button>
-      </div>
-      <div class="focus-dots">
-        <span class="focus-dot active" id="fdot-0"></span>
-        <span class="focus-dot" id="fdot-1"></span>
-        <span class="focus-dot" id="fdot-2"></span>
-        <span class="focus-dot" id="fdot-3"></span>
-      </div>
-      <button class="focus-close-btn" onclick="closeFocus()">✕ Exit Focus Mode</button>
+
+<!-- FOCUS MODE OVERLAY — rainy window aesthetic -->
+<div class="focus-overlay" id="focus-overlay">
+  <div class="rain" id="rain"></div>
+  <div class="window-frame">
+    <div class="window-cross-h"></div>
+    <div class="window-cross-v"></div>
+  </div>
+  <button class="music-btn" id="music-btn" onclick="toggleMusic()" title="Lo-fi music">🎵</button>
+  <audio id="lofi-audio" loop>
+    <source src="https://stream.zeno.fm/f3wvbbqmdg8uv" type="audio/mpeg" />
+  </audio>
+  <div class="focus-center">
+    <div class="focus-phase-label" id="focus-mode-label">FOCUS</div>
+    <div class="focus-minimal-timer" id="focus-timer">25:00</div>
+    <div class="focus-minimal-session" id="focus-session-count">Session 1 of 4</div>
+    <div class="focus-minimal-controls">
+      <button class="focus-minimal-btn" onclick="toggleFocus()" id="focus-start-btn">Start</button>
+      <button class="focus-minimal-btn ghost" onclick="resetFocus()">Reset</button>
+    </div>
+    <div class="focus-dots">
+      <span class="focus-dot active" id="fdot-0"></span>
+      <span class="focus-dot" id="fdot-1"></span>
+      <span class="focus-dot" id="fdot-2"></span>
+      <span class="focus-dot" id="fdot-3"></span>
     </div>
   </div>
+  <button class="focus-exit-btn" onclick="closeFocus()">✕ exit</button>
+</div>
 
   <!-- HYDRATION OVERLAY -->
 <div class="focus-overlay" id="hydration-overlay">
