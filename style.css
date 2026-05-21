@@ -457,58 +457,170 @@ input[type="range"] {
    FOCUS MODE OVERLAY
    ============================================================ */
 
-.focus-overlay {
-  display: none; position: fixed; inset: 0;
-  background: #0a0a0e; z-index: 200;
-  flex-direction: column; align-items: center; justify-content: center;
+#focus-overlay {
+  background: #0d1117;
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
 }
-.focus-overlay.open { display: flex; }
+#focus-overlay.open { display: flex; }
 
-.focus-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.rain { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
 
-.focus-mode-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); }
-.focus-mode-label.break { color: var(--green); }
-.focus-session-count { font-size: 13px; color: var(--text-dim); }
+.raindrop {
+  position: absolute;
+  top: -20px;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(180,200,255,0.35));
+  border-radius: 0 0 2px 2px;
+  animation: fall linear infinite;
+}
+@keyframes fall { to { transform: translateY(110vh); } }
 
-.focus-ring-wrap {
-  position: relative; width: 220px; height: 220px;
+.window-frame { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.window-cross-h { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(255,255,255,0.04); }
+.window-cross-v { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.04); }
+
+#focus-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.focus-center {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.focus-phase-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+}
+
+.focus-minimal-timer {
+  font-family: 'DM Mono', monospace;
+  font-size: 120px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: -6px;
+  line-height: 1;
+  text-shadow: 0 0 60px rgba(255,255,255,0.08);
+}
+
+.focus-minimal-session {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 1px;
+}
+
+.focus-minimal-controls { display: flex; gap: 12px; margin-top: 8px; }
+
+.focus-minimal-btn {
+  padding: 10px 28px;
+  border-radius: 40px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+}
+.focus-minimal-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+.focus-minimal-btn.ghost { background: transparent; border-color: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+.focus-minimal-btn.ghost:hover { color: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.15); }
+
+.focus-dots { display: flex; gap: 8px; margin-top: 4px; }
+.focus-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.12); transition: background 0.3s; }
+.focus-dot.active { background: rgba(255,255,255,0.5); }
+.focus-dot.done { background: rgba(52,211,153,0.6); }
+
+.music-btn {
+  position: absolute;
+  right: 32px; top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
   display: flex; align-items: center; justify-content: center;
 }
-.focus-timer {
-  position: absolute; font-size: 56px; font-weight: 700;
-  font-family: 'DM Mono', monospace; color: var(--text); letter-spacing: -2px; z-index: 1;
+.music-btn:hover { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.9); }
+.music-btn.playing { background: rgba(79,110,247,0.2); border-color: rgba(79,110,247,0.4); color: #fff; box-shadow: 0 0 20px rgba(79,110,247,0.2); }
+
+.focus-exit-btn {
+  position: absolute;
+  bottom: 28px; right: 32px;
+  z-index: 10;
+  background: transparent; border: none;
+  color: rgba(255,255,255,0.2);
+  font-size: 12px; font-family: 'DM Sans', sans-serif;
+  cursor: pointer; letter-spacing: 0.5px; transition: color 0.2s; padding: 6px;
 }
+.focus-exit-btn:hover { color: rgba(255,255,255,0.5); }
+
+#hydration-overlay { background: #0a0a0e; }
+.focus-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.focus-mode-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); }
+.focus-session-count { font-size: 13px; color: var(--text-dim); }
+.focus-ring-wrap { position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; }
+.focus-timer { position: absolute; font-size: 56px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--text); letter-spacing: -2px; z-index: 1; }
 .focus-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
 .focus-ring-bg { fill: none; stroke: #1e1e28; stroke-width: 6; }
-.focus-ring-fill {
-  fill: none; stroke: var(--orange); stroke-width: 6; stroke-linecap: round;
-  stroke-dasharray: 339.3; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.4s;
-}
-.focus-ring-fill.break { stroke: var(--green); }
-
+.focus-ring-fill { fill: none; stroke: var(--orange); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 339.3; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.4s; }
 .focus-controls { display: flex; gap: 12px; }
-.focus-control-btn {
-  padding: 12px 32px; border-radius: var(--radius-sm); border: none;
-  font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif;
-  cursor: pointer; transition: all 0.2s; background: var(--orange); color: #fff;
-}
+.focus-control-btn { padding: 12px 32px; border-radius: var(--radius-sm); border: none; font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; background: var(--orange); color: #fff; }
 .focus-control-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-.focus-control-btn.secondary {
-  background: #1e1e28; color: var(--text-muted); border: 1px solid var(--card-border);
-}
-
-.focus-dots { display: flex; gap: 10px; }
-.focus-dot { width: 8px; height: 8px; border-radius: 50%; background: #2a2a36; transition: background 0.3s; }
-.focus-dot.active { background: var(--orange); }
-.focus-dot.done { background: var(--green); }
-
-.focus-close-btn {
-  background: transparent; border: none; color: var(--text-dim);
-  font-size: 13px; font-family: 'DM Sans', sans-serif;
-  cursor: pointer; padding: 6px 12px; border-radius: 6px; transition: color 0.2s; margin-top: 8px;
-}
+.focus-control-btn.secondary { background: #1e1e28; color: var(--text-muted); border: 1px solid var(--card-border); }
+.focus-close-btn { background: transparent; border: none; color: var(--text-dim); font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; padding: 6px 12px; border-radius: 6px; transition: color 0.2s; margin-top: 8px; }
 .focus-close-btn:hover { color: var(--text); }
+.hydration-label { color: var(--cyan) !important; }
+.hydration-ring { stroke: var(--cyan) !important; }
+.hydration-start-btn { background: var(--cyan) !important; color: #0a0a0e !important; }
+.hydration-activity-selector { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.hydration-subtitle { font-size: 12px; color: var(--text-muted); letter-spacing: 0.5px; }
+.hydration-activity-btns { display: flex; gap: 10px; }
+.hydration-activity-btn { padding: 14px 20px; border-radius: var(--radius-sm); border: 1px solid var(--card-border); background: var(--card); color: var(--text-muted); cursor: pointer; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; text-align: center; transition: all 0.2s; line-height: 1.6; }
+.hydration-activity-btn span { display: block; font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.hydration-activity-btn:hover { border-color: var(--cyan); color: var(--text); }
+.hydration-activity-btn.active { background: rgba(34,211,238,0.1); border-color: var(--cyan); color: var(--cyan); }
+.hydration-activity-btn.active span { color: var(--cyan); opacity: 0.7; }
+.hydration-alert { background: rgba(34,211,238,0.12); border: 1px solid var(--cyan); border-radius: var(--radius-sm); padding: 14px 28px; font-size: 18px; font-weight: 600; color: var(--cyan); letter-spacing: 0.5px; animation: pulse-alert 0.6s ease-in-out infinite alternate; }
+@keyframes pulse-alert { from { opacity: 0.7; transform: scale(0.98); } to { opacity: 1; transform: scale(1.02); } }
 
+@media (max-width: 760px) {
+  body { padding: 24px 16px 60px; }
+  h1 { font-size: 26px; }
+  .main-grid { grid-template-columns: 1fr; }
+  .col-profile { position: static; }
+  .action-buttons { grid-template-columns: 1fr 1fr; }
+  .focus-minimal-timer { font-size: 72px; letter-spacing: -3px; }
+  .music-btn { right: 16px; }
+  .focus-exit-btn { right: 16px; bottom: 20px; }
+  .hydration-activity-btns { flex-direction: column; }
+}
 /* ============================================================
    MOBILE
    ============================================================ */
