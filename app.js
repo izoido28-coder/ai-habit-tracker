@@ -509,7 +509,7 @@ function getHabitsText() {
 
 // The actual API call — sends a prompt to Groq and returns the response
 async function callAI(prompt) {
-  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+  const response = await fetch("/api/chat", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
