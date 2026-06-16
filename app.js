@@ -17,6 +17,15 @@ const API_KEY = "";
 // ----------------------------------------------------------
 let habits = [];
 
+let userEmail = localStorage.getItem("userEmail");
+
+if (!userEmail) {
+  userEmail = prompt("Enter your email to save your progress:");
+  if (userEmail) {
+    localStorage.setItem("userEmail", userEmail);
+  }
+}
+
 // This controls which habit type is selected in the modal
 // (slider, quit, or checkbox)
 let selectedType = "slider";
@@ -25,12 +34,18 @@ let selectedType = "slider";
 // STARTUP
 // This runs automatically when the page finishes loading
 // ----------------------------------------------------------
-window.onload = function () {
-  loadProfile();      // fill in profile fields from last time
-  loadHabits();       // load saved habits from localStorage
-  checkDailyReset();  // reset daily progress if it's a new day
-  renderHabits();     // draw the habits on screen
-  showFields("slider"); // show slider fields by default in modal
+window.onload = async function () {
+
+  await loadCloudData();
+
+  if (habits.length === 0) {
+    loadHabits();
+  }
+
+  loadProfile();
+  checkDailyReset();
+  renderHabits();
+  showFields("slider");
 };
 
 
@@ -49,7 +64,8 @@ function saveProfile() {
     goal:   document.getElementById("p-goal").value.trim()
   };
 
-  localStorage.setItem("profile", JSON.stringify(profile));
+ localStorage.setItem("profile", JSON.stringify(profile));
+saveCloudData();
 
   // Show a "saved!" message for 2 seconds
   const saved = document.getElementById("profile-saved");
@@ -472,6 +488,7 @@ function toggleCheckbox(id, checked) {
 // Saves the habits array as a JSON string in the browser
 function saveHabits() {
   localStorage.setItem("habits", JSON.stringify(habits));
+  saveCloudData();
 }
 
 // Loads habits from the browser and parses them back into an array
@@ -480,6 +497,48 @@ function loadHabits() {
   if (saved) habits = JSON.parse(saved);
 }
 
+async function saveCloudData() {
+  if (!userEmail) return;
+
+  try {
+    await fetch("/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: userEmail,
+        profile: JSON.parse(localStorage.getItem("profile") || "{}"),
+        habits
+      })
+    });
+  } catch (e) {
+    console.error("Cloud save failed:", e);
+  }
+}
+
+async function loadCloudData() {
+  if (!userEmail) return;
+
+  try {
+    const res = await fetch(
+      "/api/user?email=" + encodeURIComponent(userEmail)
+    );
+
+    const data = await res.json();
+
+    habits = data.habits || [];
+
+    if (data.profile) {
+      localStorage.setItem(
+        "profile",
+        JSON.stringify(data.profile)
+      );
+    }
+  } catch (e) {
+    console.error("Cloud load failed:", e);
+  }
+}
 
 // ============================================================
 //  AI COACH — sends habit + profile data to Groq API
